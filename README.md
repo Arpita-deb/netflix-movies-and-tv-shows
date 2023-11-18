@@ -3,7 +3,7 @@
 
 ![Netflix logo](https://logos-world.net/wp-content/uploads/2020/04/Netflix-Logo-2014-present.jpg)
 
-# Introduction
+# Introduction:
 
 Netflix is an American subscription video on-demand over-the-top streaming service which  was launched on January 16, 2007,. The service primarily distributes original and acquired films and television shows from various genres, and it is available internationally in multiple languages.[6]
 
@@ -106,15 +106,15 @@ For this analysis I'll be using 2 raw files raw_credits and raw_titles which con
 
 # Data cleaning:
 
-Step 1 - Making a backup copy of the original data in csv format.
+## Step 1 - Making a backup copy of the original data in csv format.
 
-Step 2 - Creating a new database called 'netflix' in PostgreSQL Database system 
+## Step 2 - Creating a new database called 'netflix' in PostgreSQL Database system 
     
     DROP DATABASE netflix; -- In order to remove an existing database
     CREATE DATABASE netflix WITH OWNER arpita;
     \c netflix  -- entering into the database
 
-Step 3 - Creating the tables to hold the data loaded from csv files
+## Step 3 - Creating the tables to hold the data loaded from csv files
     
     DROP TABLE IF EXISTS raw_titles CASCADE;
     DROP TABLE IF EXISTS raw_credits CASCADE;
@@ -146,18 +146,17 @@ Step 3 - Creating the tables to hold the data loaded from csv files
 
     set client_encoding to UTF8; -- While importing the data from csv file to database, an error occured, which showed that the client encoding i.e the format of the data in csv file, was set on WIN1252. To work in the database it needed to change into UTF8.
 
--- loading the data into the raw_titles table
+Loading the data into the raw_titles table - 
    
     \copy raw_titles(index, id, title, type, release_year, age_certification, runtime, genres, production_countries, seasons, imdb_id, imdb_score, imdb_votes) FROM 'C:\Users\Dell\Downloads\archive\raw_titles.csv' WITH DELIMITER ',' CSV HEADER;
 
-
--- loading the data into the raw_credits table
+Loading the data into the raw_credits table - 
      
      \copy raw_credits(index, person_id, id, name, character, role) FROM 'C:\Users\Dell\Downloads\archive\raw_credits.csv' WITH DELIMITER ',' CSV HEADER;
 
-Step 4 - Cleaning the data
+## Step 4 - Cleaning the data
 
-4.1. Checking the size of the dataset
+### 4.1. Checking the size of the dataset
 
     SELECT COUNT(*) FROM raw_titles; -- returns 5806
 
@@ -167,8 +166,7 @@ There are 5806 items in the raw_titles table.
 
 There are information of 77,213 actors/directors in raw_credits table.
 
-
-4.2. Checking the datatype
+### 4.2. Checking the datatypes
 
     SELECT COLUMN_NAME, DATA_TYPE
     FROM INFORMATION_SCHEMA.COLUMNS
@@ -179,39 +177,39 @@ There are information of 77,213 actors/directors in raw_credits table.
     WHERE TABLE_NAME = 'raw_credits';
 
 
-4.3. Removing redundant columns
+### 4.3. Removing redundant columns
 
     ALTER TABLE  raw_titles DROP COLUMN index;
     ALTER TABLE raw_titles DROP COLUMN imdb_id;
     ALTER TABLE raw_credits DROP COLUMN index;
 
-4.4. Looking for null values
+### 4.4. Looking for null values
 
-raw_titles table
+* raw_titles table
 
-    select count(*) from raw_titles where id is null; -- returns 0
-    select count(*) from raw_titles where title is null; -- returns 1 
-    select count(*) from raw_titles where type is null; -- returns 0
-    select count(*) from raw_titles where release_year is null;  -- returns 0
-    select count(*) from raw_titles where runtime = 0; -- returns 24
-    select count(*) from raw_titles where genres is null; -- returns 0. There are no null values in this column but there are some values with [] which are essentially null values but with empty string.
-    select count(*) from raw_titles where genres= '[]'; -- There are 68 of them
-    select count(*) from raw_titles where production_countries is null; -- returns 0. Same as genres, there are values with [] which are null values with empty string.
-    select count(*) from raw_titles where production_countries= '[]'; -- returns 232
-    select type, count(*) AS nulls from raw_titles where seasons is null group by type; -- returns 3759 (All Movies, no shows) 
-    select count(*) from raw_titles where imdb_score is null AND imdb_votes is null; -- returns 523
-    select count(*) from raw_titles where imdb_score is null OR imdb_votes is null; -- returns 539
+      select count(*) from raw_titles where id is null; -- returns 0
+      select count(*) from raw_titles where title is null; -- returns 1 
+      select count(*) from raw_titles where type is null; -- returns 0
+      select count(*) from raw_titles where release_year is null;  -- returns 0
+      select count(*) from raw_titles where runtime = 0; -- returns 24
+      select count(*) from raw_titles where genres is null; -- returns 0. There are no null values in this column but there are some values with [] which are essentially null values but with empty string.
+      select count(*) from raw_titles where genres= '[]'; -- There are 68 of them
+      select count(*) from raw_titles where production_countries is null; -- returns 0. Same as genres, there are values with [] which are null values with empty string.
+      select count(*) from raw_titles where production_countries= '[]'; -- returns 232
+      select type, count(*) AS nulls from raw_titles where seasons is null group by type; -- returns 3759 (All Movies, no shows) 
+      select count(*) from raw_titles where imdb_score is null AND imdb_votes is null; -- returns 523
+      select count(*) from raw_titles where imdb_score is null OR imdb_votes is null; -- returns 539
 
-raw_credits table
+* raw_credits table
     
-    select count(*) from raw_credits where person_id is null;  -- returns 0
-    select count(*) from raw_credits where id is null;  -- returns 0
-    select count(*) from raw_credits where name is null;  -- returns 0
-    select count(*) from raw_credits where character is null;  -- returns 9627
+      select count(*) from raw_credits where person_id is null;  -- returns 0
+      select count(*) from raw_credits where id is null;  -- returns 0
+      select count(*) from raw_credits where name is null;  -- returns 0
+      select count(*) from raw_credits where character is null;  -- returns 9627
 
 So there are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
 
-4.5. Removing the null values
+### 4.5. Removing the null values
 
 I have 1 null value in title column, which needs to be deleted as the title column needs to be unique and non nullable. There are 24 rows with 0 runtime which doesn't make sense, so they're also to be deleted. 
 The imdb_score and imdb_votes have 539 null values altogether. I can do any of the following with these 2 columns -
@@ -228,7 +226,7 @@ The imdb_score and imdb_votes have 539 null values altogether. I can do any of t
        OR imdb_score IS NULL
        OR imdb_votes IS NULL;
 
-4.6. Looking for duplicate values
+### 4.6. Looking for duplicate values
 
 In raw_titles table 
     
@@ -258,7 +256,7 @@ where role.id ='tm228574' and role.person_id =65832;
 There are no duplicate values. But there are entries with same id and person_id but with different character or role. Now I want to have a unique combination of person_id and id, with unique role i.e for either director or actor and concatenate all the character types into a single character. I'll do it later.
 
 
-4.7. Changing the cases of the texts into Proper case
+### 4.7. Changing the cases of the texts into Proper case
 
     UPDATE raw_titles SET type = initcap(type);
     UPDATE raw_titles SET title= initcap(title);
@@ -267,16 +265,16 @@ There are no duplicate values. But there are entries with same id and person_id 
     UPDATE raw_credits SET name = initcap(name);
 
 
-4.8. Trimming the white, leading and trailing spaces
+### 4.8. Trimming the white, leading and trailing spaces
 
     UPDATE raw_credits SET name = TRIM(name);
     UPDATE raw_credits SET character = TRIM(character);
     UPDATE raw_titles SET title = TRIM(title);
     UPDATE raw_titles SET genres = TRIM(genres);
 
-4.9. String manipulation
+### 4.9. String manipulation
 
-4.9.1 REMOVING THE [ ] BRACKETS FROM genres, production_countries COLUMNS
+#### 4.9.1 REMOVING THE [ ] BRACKETS FROM genres, production_countries COLUMNS
  
 Adding a new columns country and genre to hold the new values 
 
@@ -285,37 +283,37 @@ Adding a new columns country and genre to hold the new values
     UPDATE raw_titles SET country = SUBSTRING(production_countries, 2, (length(production_countries)-2)) WHERE id=id;
     UPDATE raw_titles SET genre =  SUBSTRING(genres, 2, (length(genres)-2)) WHERE id=id;
 
-4.9.2 REMOVING THE '' (quotation marks) FROM THE genre and country COLUMNS
+#### 4.9.2 REMOVING THE '' (quotation marks) FROM THE genre and country COLUMNS
 
     UPDATE raw_titles SET genre = REPLACE(genre, '''', '') WHERE genre LIKE '%''%';
     UPDATE raw_titles SET country = REPLACE(country, '''', '') WHERE country LIKE '%''%';
 
-4.10. Replacing the null values with default values 
+### 4.10. Replacing the null values with default values 
 
-4.10.1 SETTING THE NULL VALUES IN character COLUMN TO 'No information'
+#### 4.10.1 SETTING THE NULL VALUES IN character COLUMN TO 'No information'
 
     UPDATE raw_credits SET character = 'No information' WHERE character IS NULL;
     UPDATE raw_credits SET character = 'Director' WHERE role = 'Director';
 
-4.10.2 SETTING THE NULL VALUES IN seasons TO 0 WHICH CORRESPONDS TO MOVIES
+#### 4.10.2 SETTING THE NULL VALUES IN seasons TO 0 WHICH CORRESPONDS TO MOVIES
 
     UPDATE raw_titles SET seasons = 0 WHERE seasons IS NULL;
 
-4.10.3 SETTING THE NULL VALUES IN age_certification TO 'No information'    
+#### 4.10.3 SETTING THE NULL VALUES IN age_certification TO 'No information'    
     
     UPDATE raw_titles SET age_certification = 'Others' WHERE age_certification IS NULL;
 
-4.10.4 SETTING THE VALUES WITH [] IN genres COLUMN WITH 'No Information'
+#### 4.10.4 SETTING THE VALUES WITH [] IN genres COLUMN WITH 'No Information'
 
     UPDATE raw_titles SET genres = 'No information' WHERE genres = '[]';
 
-4.10.5 SETTING THE VALUES WITH [] IN production_countries COLUMN WITH 'No Information'
+#### 4.10.5 SETTING THE VALUES WITH [] IN production_countries COLUMN WITH 'No Information'
 
     UPDATE raw_titles SET production_countries  = 'No information' WHERE production_countries  = '[]';
 
-4.10. Dealing with titles
+### 4.11. Dealing with titles
 
-4.10.1 SOME UNUSUAL TITLES
+#### 4.11.1 SOME UNUSUAL TITLES
 There are 4 shows/movies with names formatted as dates in csv file. So I looked into them closely. I used a left join from (raw_titles to raw_credits) to get all the information about these 4 items from both tables.
 
     SELECT t.id, t.title, t.runtime,t.release_year, c.person_id, c.id, c.name, c.character, c.role
@@ -332,7 +330,7 @@ Renaming title '30 March' to '30.March'
 
 (one point to remember : there are no details about this movie in raw_credits)
 
-4.10.2 SOME TITLES STARTING WITH #
+#### 4.11.2 SOME TITLES STARTING WITH #
 
 I used a simple Regular Expression to filter only whose titles that doesn't start either with any numerical digit (0=9) or English alphabets (A-Z).
 
@@ -342,19 +340,19 @@ It returns 13 rows which starts with a #. So to remove that character from the l
 
     UPDATE raw_titles SET title = LTRIM(title, '#') WHERE title !~'^[0-9A-Z]';
 
-4.11. Removing the extra columns
+### 4.12. Removing the extra columns
 
 Now that we've created a trimmed, properly capitalized and cleaned columns genre and country, we can get rid of the former columns genres and production_countries.
  
     ALTER TABLE raw_titles DROP COLUMN genres;
     ALTER TABLE raw_titles DROP COLUMN production_countries;
     
-4.12. Renaming the 'raw_titles' table to 'titles'
+### 4.13. Renaming the 'raw_titles' table to 'titles'
 
     DROP TABLE IF EXISTS titles;
     ALTER TABLE raw_titles RENAME TO titles;
 
-4.13. Concatenating multiple characters into a single row
+### 4.14. Concatenating multiple characters into a single row
 
 In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
     
@@ -380,7 +378,7 @@ checking for duplicates in the credits table
 
 It shows there are atmost 2 people with same id and person_id which implies that one entry is for actor and one for director role.
 
-4.14. Checking the number of records in the cleaned tables
+### 4.15. Checking the number of records in the cleaned tables
 
     SELECT COUNT(*) FROM titles; -- Returns 5249 rows
     SELECT * from raw_titles limit 4; -- -- Returns 77213 [double check it] rows
@@ -390,7 +388,7 @@ It shows there are atmost 2 people with same id and person_id which implies that
     SELECT * from raw_titles limit 4;
     [IMAGE]
 
-4.15. Checking once more for null values in the cleaned tables
+### 4.15. Checking once more for null values in the cleaned tables
 
     SELECT * FROM titles WHERE title IS NULL
     OR type IS NULL 
@@ -407,13 +405,14 @@ It shows there are atmost 2 people with same id and person_id which implies that
     OR character IS NULL 
     OR role IS NULL; -- Returns 0
 
-4.16.  Save the new tables and import them as cleaned csv files
+### 4.17.  Save the new tables and import them as cleaned csv files
 
     \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
     \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
 
 
-4.17 UPDATING THE NULL VALUES IN NEW TABLES
+### 4.18 Updating the null values in the new tables 
+
 Unfortunately, the null values in country and genre tables have been stored as empty strings instead of 'No information'. So I update them here once again, before starting normalizing them. 
 
     UPDATE titles SET country = 'No information' WHERE country = '';
