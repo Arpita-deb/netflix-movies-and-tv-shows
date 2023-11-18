@@ -275,7 +275,8 @@ There are no duplicate values. But there are entries with same id and person_id 
 ### 4.9. String manipulation
 
 #### 4.9.1 REMOVING THE [ ] BRACKETS FROM genres, production_countries COLUMNS
- 
+
+ [IMAGE WITH UNCLEANED COUNTRIES AND GENRES]
 Adding a new columns country and genre to hold the new values 
 
     ALTER TABLE raw_titles ADD COLUMN country TEXT;
@@ -283,7 +284,7 @@ Adding a new columns country and genre to hold the new values
     UPDATE raw_titles SET country = SUBSTRING(production_countries, 2, (length(production_countries)-2)) WHERE id=id;
     UPDATE raw_titles SET genre =  SUBSTRING(genres, 2, (length(genres)-2)) WHERE id=id;
 
-#### 4.9.2 REMOVING THE '' (quotation marks) FROM THE genre and country COLUMNS
+#### 4.9.2 REMOVING THE '' (quotation marks) FROM THE genre AND country COLUMNS
 
     UPDATE raw_titles SET genre = REPLACE(genre, '''', '') WHERE genre LIKE '%''%';
     UPDATE raw_titles SET country = REPLACE(country, '''', '') WHERE country LIKE '%''%';
@@ -330,15 +331,19 @@ Renaming title '30 March' to '30.March'
 
 (one point to remember : there are no details about this movie in raw_credits)
 
-#### 4.11.2 SOME TITLES STARTING WITH #
+#### 4.11.2 SOME TITLES STARTING WITH '#'
 
 I used a simple Regular Expression to filter only whose titles that doesn't start either with any numerical digit (0=9) or English alphabets (A-Z).
 
     SELECT title FROM raw_titles WHERE title !~'^[0-9A-Z]' ORDER BY title;
 
+[IMAGE]
+
 It returns 13 rows which starts with a #. So to remove that character from the left side of the string, I used LTRIM function.
 
     UPDATE raw_titles SET title = LTRIM(title, '#') WHERE title !~'^[0-9A-Z]';
+
+[IMAGE]
 
 ### 4.12. Removing the extra columns
 
@@ -355,6 +360,9 @@ Now that we've created a trimmed, properly capitalized and cleaned columns genre
 ### 4.14. Concatenating multiple characters into a single row
 
 In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
+
+[IMAGE 1 WITH RAW CHARACTERS]
+[IMAGE WITH CLEANED CHARACTER]
     
     DROP TABLE IF EXISTS credits;
     CREATE TABLE credits (person_id INTEGER, id VARCHAR(20), name TEXT, role VARCHAR(8), character TEXT);
