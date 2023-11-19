@@ -246,9 +246,19 @@ In raw_credits table
     ORDER BY count DESC LIMIT 10;
 
 [IMAGE]
-[QUERY OF THE JOIN TABLE WHICH SHOWS 4 ENTRIES]
 
-SELECT film.title, role.name, role.character, role.role
+select film.title, role.name, role.character, role.role
+from raw_titles film
+join raw_credits role on film.id = role.id
+where role.id ='tm127384' and role.person_id =11475;
+
+select film.title, role.name, role.character, role.role
+from raw_titles film
+join raw_credits role on film.id = role.id
+where role.id ='tm226362' and role.person_id =307659;
+
+
+select film.title, role.name, role.character, role.role
 from raw_titles film
 join raw_credits role on film.id = role.id
 where role.id ='tm228574' and role.person_id =65832;
