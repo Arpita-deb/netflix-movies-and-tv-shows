@@ -176,6 +176,7 @@ There are information of 77,213 actors/directors in raw_credits table.
     FROM INFORMATION_SCHEMA.COLUMNS
     WHERE TABLE_NAME = 'raw_credits';
 
+![Screenshot (910)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6f8ba96b-3b19-46d4-922d-d38cddffd6f6)
 
 ### 4.3. Removing redundant columns
 
@@ -187,26 +188,26 @@ There are information of 77,213 actors/directors in raw_credits table.
 
 * raw_titles table
 
-      select count(*) from raw_titles where id is null; -- returns 0
-      select count(*) from raw_titles where title is null; -- returns 1 
-      select count(*) from raw_titles where type is null; -- returns 0
-      select count(*) from raw_titles where release_year is null;  -- returns 0
-      select count(*) from raw_titles where runtime = 0; -- returns 24
-      select count(*) from raw_titles where genres is null; -- returns 0. There are no null values in this column but there are some values with [] which are essentially null values but with empty string.
-      select count(*) from raw_titles where genres= '[]'; -- There are 68 of them
-      select count(*) from raw_titles where production_countries is null; -- returns 0. Same as genres, there are values with [] which are null values with empty string.
-      select count(*) from raw_titles where production_countries= '[]'; -- returns 232
-      select type, count(*) AS nulls from raw_titles where seasons is null group by type; -- returns 3759 (All Movies, no shows) 
-      select count(*) from raw_titles where imdb_score is null AND imdb_votes is null; -- returns 523
-      select count(*) from raw_titles where imdb_score is null OR imdb_votes is null; -- returns 539
+      SELECT COUNT(*) FROM raw_titles WHERE id IS NULL; -- returns 0
+      SELECT COUNT(*) FROM raw_titles WHERE title IS NULL; -- returns 1 
+      SELECT COUNT(*) FROM raw_titles WHERE type IS NULL; -- returns 0
+      SELECT COUNT(*) FROM raw_titles WHERE release_year IS NULL;  -- returns 0
+      SELECT COUNT(*) FROM raw_titles WHERE runtime = 0; -- returns 24
+      SELECT COUNT(*) FROM raw_titles WHERE genres IS NULL; -- returns 0. There are no null values in this column but there are some values with [] which are essentially null values but with empty string.
+      SELECT COUNT(*) FROM raw_titles WHERE genres= '[]'; -- There are 68 of them
+      SELECT COUNT(*) FROM raw_titles WHERE production_countries IS NULL; -- returns 0. Same as genres, there are values with [] which are null values with empty string.
+      SELECT COUNT(*) FROM raw_titles WHERE production_countries= '[]'; -- returns 232
+      SELECT  type, COUNT(*) AS nulls FROM raw_titles WHERE seasons IS NULL GROUP BY type; -- returns 3759 (All Movies, no shows) 
+      SELECT COUNT(*) FROM raw_titles WHERE imdb_score is null AND imdb_votes IS NULL; -- returns 523
+      SELECT COUNT(*) FROM raw_titles WHERE imdb_score is null OR imdb_votes IS NULL; -- returns 539
 
 * raw_credits table
-    
-      select count(*) from raw_credits where person_id is null;  -- returns 0
-      select count(*) from raw_credits where id is null;  -- returns 0
-      select count(*) from raw_credits where name is null;  -- returns 0
-      select count(*) from raw_credits where character is null;  -- returns 9627
 
+      SELECT COUNT(*) FROM raw_credits WHERE person_id IS NULL;  -- returns 0
+      SELECT COUNT(*) FROM raw_credits WHERE id IS NULL;  -- returns 0
+      SELECT COUNT(*) FROM raw_credits WHERE name IS NULL;  -- returns 0
+      SELECT COUNT(*) FROM raw_credits WHERE character IS NULL;  -- returns 9627
+  
 So there are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
 
 ### 4.5. Removing the null values
@@ -245,23 +246,25 @@ In raw_credits table
     HAVING COUNT(*) > 1
     ORDER BY count DESC LIMIT 10;
 
-[IMAGE]
 
-select film.title, role.name, role.character, role.role
-from raw_titles film
-join raw_credits role on film.id = role.id
-where role.id ='tm127384' and role.person_id =11475;
+![Screenshot (911)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e964f551-fcfe-464f-8a33-616612137a32)
 
-select film.title, role.name, role.character, role.role
-from raw_titles film
-join raw_credits role on film.id = role.id
-where role.id ='tm226362' and role.person_id =307659;
+    SELECT t.title, c.name, c.character, c.role
+    FROM raw_titles t
+    JOIN raw_credits c ON t.id = c.id
+    WHERE c.id ='tm127384' AND c.person_id =11475;
 
+    SELECT t.title, c.name, c.character, c.role
+    FROM raw_titles t
+    JOIN raw_credits c ON t.id = c.id
+    WHERE c.id ='tm226362' AND c.person_id =307659;
 
-select film.title, role.name, role.character, role.role
-from raw_titles film
-join raw_credits role on film.id = role.id
-where role.id ='tm228574' and role.person_id =65832;
+    SELECT t.title, c.name, c.character, c.role
+    FROM raw_titles t
+    JOIN raw_credits c ON t.id = c.id
+    WHERE c.id ='tm228574' AND c.person_id =65832;
+
+![Screenshot (912)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c612e450-3a0c-49f6-a4c8-7b736b63979e)
 
 There are no duplicate values. But there are entries with same id and person_id but with different character or role. Now I want to have a unique combination of person_id and id, with unique role i.e for either director or actor and concatenate all the character types into a single character. I'll do it later.
 
@@ -286,8 +289,11 @@ There are no duplicate values. But there are entries with same id and person_id 
 
 #### 4.9.1 REMOVING THE [ ] BRACKETS FROM genres, production_countries COLUMNS
 
- [IMAGE WITH UNCLEANED COUNTRIES AND GENRES]
-Adding a new columns country and genre to hold the new values 
+The columns production_countries and genres look like this in this image below. They need to be cleaned.
+
+![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/53bd55c4-6667-4d5c-a070-8e0802265c24)
+
+Adding a new columns country and genre in the raw_titles table to hold the new values -
 
     ALTER TABLE raw_titles ADD COLUMN country TEXT;
     ALTER TABLE raw_titles ADD COLUMN genre TEXT;
@@ -298,6 +304,10 @@ Adding a new columns country and genre to hold the new values
 
     UPDATE raw_titles SET genre = REPLACE(genre, '''', '') WHERE genre LIKE '%''%';
     UPDATE raw_titles SET country = REPLACE(country, '''', '') WHERE country LIKE '%''%';
+
+After removing the brackets and quotation marks, the columns look like this -
+
+![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
 
 ### 4.10. Replacing the null values with default values 
 
@@ -347,13 +357,11 @@ I used a simple Regular Expression to filter only whose titles that doesn't star
 
     SELECT title FROM raw_titles WHERE title !~'^[0-9A-Z]' ORDER BY title;
 
-[IMAGE]
+![Screenshot (915)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/2bbc0b38-6ac9-4bb1-a8e6-02f24783feef)
 
 It returns 13 rows which starts with a #. So to remove that character from the left side of the string, I used LTRIM function.
 
     UPDATE raw_titles SET title = LTRIM(title, '#') WHERE title !~'^[0-9A-Z]';
-
-[IMAGE]
 
 ### 4.12. Removing the extra columns
 
@@ -371,8 +379,7 @@ Now that we've created a trimmed, properly capitalized and cleaned columns genre
 
 In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
 
-[IMAGE 1 WITH RAW CHARACTERS]
-[IMAGE WITH CLEANED CHARACTER]
+![Screenshot (908)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/4f18d8a6-283a-484f-b40e-dcc854855754)
     
     DROP TABLE IF EXISTS credits;
     CREATE TABLE credits (person_id INTEGER, id VARCHAR(20), name TEXT, role VARCHAR(8), character TEXT);
@@ -380,6 +387,8 @@ In a film or show, there are multiple roles that are played by more than one per
     INSERT INTO credits (person_id, id, name,role, character) SELECT person_id, id, name, role, STRING_AGG(character, ' / ') FROM raw_credits GROUP BY person_id, id, name, role;
 
 This query will group the rows in the raw_credits table by person_id,id,name and role and concatenate the values in the character column for each group using the string_agg function. The resulting table will have 5 columns: person_id,id, name, character, role where character contains the concatenated values of the character column for each group. This table now has 77122 entries. 
+
+![Screenshot (909)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6c7c7fbe-ee1b-4751-ab6a-1a0822ae068a)
 
 showing some of the concatenated values
      
@@ -394,17 +403,22 @@ checking for duplicates in the credits table
     ORDER BY COUNT(*) DESC 
     LIMIT 10;
 
+
+![Screenshot (916)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/78eaf824-a06a-451e-8b51-ef65799ade7f)
+
 It shows there are atmost 2 people with same id and person_id which implies that one entry is for actor and one for director role.
 
 ### 4.15. Checking the number of records in the cleaned tables
 
     SELECT COUNT(*) FROM titles; -- Returns 5249 rows
-    SELECT * from raw_titles limit 4; -- -- Returns 77213 [double check it] rows
-    [IMAGE OF THE CLEANED TABLE]
+    SELECT * from raw_titles limit 6;
+   
+![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
     
-    SELECT COUNT(*) FROM credits;
-    SELECT * from raw_titles limit 4;
-    [IMAGE]
+    SELECT COUNT(*) FROM credits; -- Returns 77213 [double check it] rows
+    SELECT * from raw_titles limit 6;
+  
+![Screenshot (914)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0d3f9333-206b-48ac-ace6-0e0ab5b40aee)
 
 ### 4.15. Checking once more for null values in the cleaned tables
 
@@ -423,18 +437,18 @@ It shows there are atmost 2 people with same id and person_id which implies that
     OR character IS NULL 
     OR role IS NULL; -- Returns 0
 
-### 4.17.  Save the new tables and import them as cleaned csv files
-
-    \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
-    \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
-
-
-### 4.18 Updating the null values in the new tables 
+### 4.17. Updating the null values in the new tables 
 
 Unfortunately, the null values in country and genre tables have been stored as empty strings instead of 'No information'. So I update them here once again, before starting normalizing them. 
 
     UPDATE titles SET country = 'No information' WHERE country = '';
     UPDATE titles SET genre = 'No information' WHERE genre = '';
+
+### 4.18.  Save the new tables and import them as cleaned csv files
+
+    \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
+    \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
+
 
 # Data Design:
 # Data Analyze:
