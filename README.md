@@ -23,6 +23,7 @@ The goal of this project is to find the answers to these following questions -
 8. What are the most and least popular genres on Netflix?
 9. Which were the top years in terms of the number of titles released?
 10. Which actor/director has most films/series in Netflix?
+11. What are the percentage relative frequency for age_certification, genre and country?
 
 # Tools used:
 
@@ -449,15 +450,26 @@ Unfortunately, the null values in country and genre tables have been stored as e
     \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
     \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
 
-
 # Data Design:
 # Data Analyze:
 # Data Visualization:
 # Results:
 
 ## Resources:
+
 1. Dataset
    
    * [Netflix Movies and Series in Kaggle](https://www.kaggle.com/datasets/thedevastator/the-ultimate-netflix-tv-shows-and-movies-dataset?rvi=1)
    * [Netflix Movies and Series in data.world](https://data.world/gonzandrobles/netflix-movies-and-series)
    * [Netflix Wikipedia](https://en.wikipedia.org/wiki/Netflix#)
+
+2. Data Cleaning in SQL
+
+   * [Mastering Data Cleanin Techniques With SQL Explained Examples - Medium Article](https://medium.com/gitconnected/mastering-data-cleaning-techniques-with-sql-explained-examples-80980fef2d3a)
+   * [Data Cleaning using SQL - Medium Article](https://medium.com/@aakash_7/data-cleaning-using-sql-6aee7fca84ee)
+   * [Data Cleaning in SQL](https://learnsql.com/blog/data-cleaning-in-sql/)
+   * [The Ultimate Guide to Data Cleaning in SQL](https://acho.io/blogs/the-ultimate-guide-to-data-cleaning-in-sql)
+   * [The Ultimate Guide to Data Cleaning in SQL](https://medium.com/@sqlfundamentals/the-ultimate-guide-to-data-cleaning-in-sql-74855cce28c8)
+
+4. Regular Expressions
+5. 
