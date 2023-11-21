@@ -321,15 +321,15 @@ After removing the brackets and quotation marks, the columns look like this -
 
     UPDATE raw_titles SET seasons = 0 WHERE seasons IS NULL;
 
-#### 4.10.3 SETTING THE NULL VALUES IN age_certification TO 'No information'    
+#### 4.10.3 SETTING THE NULL VALUES IN age_certification TO 'Others'    
     
     UPDATE raw_titles SET age_certification = 'Others' WHERE age_certification IS NULL;
 
-#### 4.10.4 SETTING THE VALUES WITH [] IN genres COLUMN WITH 'No Information'
+#### 4.10.4 SETTING THE VALUES WITH [] IN genres COLUMN WITH 'N/A'
 
     UPDATE raw_titles SET genres = 'No information' WHERE genres = '[]';
 
-#### 4.10.5 SETTING THE VALUES WITH [] IN production_countries COLUMN WITH 'No Information'
+#### 4.10.5 SETTING THE VALUES WITH [] IN production_countries COLUMN WITH 'N/A'
 
     UPDATE raw_titles SET production_countries  = 'No information' WHERE production_countries  = '[]';
 
@@ -450,7 +450,32 @@ Unfortunately, the null values in country and genre tables have been stored as e
     \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
     \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
 
-# Data Design:
+# Database Design and :
+
+**What is data modeling?**
+
+Data modeling is the process of creating a visual representation of either a whole information system or parts of it to communicate connections between data points and structures. The goal is to illustrate the types of data used and stored within the system, the relationships among these data types, the ways the data can be grouped and organized and its formats and attributes.
+
+Like any design process, database and information system design begins at a high level of abstraction and becomes increasingly more concrete and specific. Data models can generally be divided into three categories, which vary according to their degree of abstraction. The process will start with a conceptual model, progress to a logical model and conclude with a physical model.
+
+## Conceptual data models
+
+They are also referred to as domain models and offer a big-picture view of what the system will contain, how it will be organized, and which business rules are involved. Conceptual models are usually created as part of the process of gathering initial project requirements. Typically, they include entity classes (defining the types of things that are important for the business to represent in the data model), their characteristics and constraints, the relationships between them and relevant security and data integrity requirements. Any notation is typically simple.
+
+## Logical data models
+
+They are less abstract and provide greater detail about the concepts and relationships in the domain under consideration. One of several formal data modeling notation systems is followed. These indicate data attributes, such as data types and their corresponding lengths, and show the relationships among entities. Logical data models don’t specify any technical system requirements. This stage is frequently omitted in agile or DevOps practices. Logical data models can be useful in highly procedural implementation environments, or for projects that are data-oriented by nature, such as data warehouse design or reporting system development.
+
+## Physical data models
+
+They provide a schema for how the data will be physically stored within a database. As such, they’re the least abstract of all. They offer a finalized design that can be implemented as a relational database, including associative tables that illustrate the relationships among entities as well as the primary keys and foreign keys that will be used to maintain those relationships. Physical data models can include database management system (DBMS)-specific properties, including performance tuning.
+
+This database is normalized upto 3rd Normal Form. It ensures that -
+
+1. Each table have columns that only store a single piece of data and that data is accessed through a unique key (Primary Key) or a composite key (combination of primary keys). [First Normal Form]
+2. Each Non-key attributes (i.e., columns other than primary key(s) are functionally dependent on the primary key only. [Second Normal Form]
+3. There is no transitional dependency of the non-key attributes i.e., each table has columns that are dependent only on the key. [Third Normal Form]
+
 # Data Analyze:
 # Data Visualization:
 # Results:
@@ -470,6 +495,11 @@ Unfortunately, the null values in country and genre tables have been stored as e
    * [Data Cleaning in SQL](https://learnsql.com/blog/data-cleaning-in-sql/)
    * [The Ultimate Guide to Data Cleaning in SQL](https://acho.io/blogs/the-ultimate-guide-to-data-cleaning-in-sql)
    * [The Ultimate Guide to Data Cleaning in SQL](https://medium.com/@sqlfundamentals/the-ultimate-guide-to-data-cleaning-in-sql-74855cce28c8)
+
+3. Data Design
+   * [Data Modelling - IBM](https://www.ibm.com/topics/data-modeling)
+   * [From Spreadsheets to Database - A Comprehensive study of Database Normalization](https://medium.com/@arpita_deb/from-spreadsheets-to-database-c2e8dbeb6a76)
+   * [Books Database Normalization](https://github.com/Arpita-deb/Books-Database-Normalization.git)
 
 4. Regular Expressions
 5. 
