@@ -450,9 +450,23 @@ Unfortunately, the null values in country and genre tables have been stored as e
     \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
     \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
 
-# Database Design and :
+# Database Design:
 
-**What is data modeling?**
+By the end of data cleaning process we end up with two clean tables, *titles* containing all information on shows/movies and *credits* containing the information of actors and directors associated with each show. In both tables, the one important attribute that uniquely identifies a show is its **id**. Each table has this column that helps us join the two tables together. 
+
+But the titles table contain 5249 unique entries of shows, while credits show contain information for 5434 shows. Clearly, these extra rows in credits table have no equivalent data in shows table. So,we'll these redundant rows that would not help us in the analysis.
+
+[image]
+
+In order to do that, we can create a third table (or view) that joins the two tables together omitting the extra rows. 
+
+    CREATE VIEW netflix AS 
+    SELECT t.id, t.title,t.type, t.release_year, t.age_certification,t.runtime,t.seasons, t.imdb_score, t.imdb_votes, t.genre, t.country,c.person_id, c.name,c.role,c.character
+    FROM credits c
+    INNER JOIN titles t
+    ON c.id = t.id;
+
+This table contains 72688 rows of data.
 
 Data modeling is the process of creating a visual representation of either a whole information system or parts of it to communicate connections between data points and structures. The goal is to illustrate the types of data used and stored within the system, the relationships among these data types, the ways the data can be grouped and organized and its formats and attributes.
 
