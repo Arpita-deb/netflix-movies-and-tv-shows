@@ -110,105 +110,17 @@ For this analysis I'll be using 2 raw files raw_credits and raw_titles which con
 ## Step 1 - Making a backup copy of the original data in csv format.
 
 ## Step 2 - Creating a new database called 'netflix' in PostgreSQL Database system 
-    
-    DROP DATABASE netflix; -- In order to remove an existing database
-    CREATE DATABASE netflix WITH OWNER arpita;
-    \c netflix  -- entering into the database
-
 ## Step 3 - Creating the tables to hold the data loaded from csv files
-    
-    DROP TABLE IF EXISTS raw_titles CASCADE;
-    DROP TABLE IF EXISTS raw_credits CASCADE;
- 
-    CREATE TABLE raw_titles
-    (index INTEGER,
-     id VARCHAR(15),
-     title TEXT,
-     type VARCHAR(5),
-     release_year INTEGER,
-     age_certification VARCHAR(10),
-     runtime INTEGER,
-     genres VARCHAR(100),
-     production_countries VARCHAR(50),
-     seasons FLOAT,
-     imdb_id VARCHAR(15),
-     imdb_score FLOAT,
-     imdb_votes INTEGER
-    );
-
-    CREATE TABLE raw_credits(
-     index INTEGER,
-     person_id INTEGER,	
-     id VARCHAR(15),
-     name TEXT,
-     character TEXT,
-     role VARCHAR(8)
-    );
-
-    set client_encoding to UTF8; -- While importing the data from csv file to database, an error occured, which showed that the client encoding i.e the format of the data in csv file, was set on WIN1252. To work in the database it needed to change into UTF8.
-
-Loading the data into the raw_titles table - 
-   
-    \copy raw_titles(index, id, title, type, release_year, age_certification, runtime, genres, production_countries, seasons, imdb_id, imdb_score, imdb_votes) FROM 'C:\Users\Dell\Downloads\archive\raw_titles.csv' WITH DELIMITER ',' CSV HEADER;
-
-Loading the data into the raw_credits table - 
-     
-     \copy raw_credits(index, person_id, id, name, character, role) FROM 'C:\Users\Dell\Downloads\archive\raw_credits.csv' WITH DELIMITER ',' CSV HEADER;
-
-## Step 4 - Cleaning the data
+## Step 4 -Loading the data into the raw_titles and raw_credits table
+## Step 5 - Cleaning the data
 
 ### 4.1. Checking the size of the dataset
 
-    SELECT COUNT(*) FROM raw_titles; -- returns 5806
-
-There are 5806 items in the raw_titles table.
-    
-    SELECT COUNT(*) FROM raw_credits; -- returns 77213
-
-There are information of 77,213 actors/directors in raw_credits table.
-
 ### 4.2. Checking the datatypes
-
-    SELECT COLUMN_NAME, DATA_TYPE
-    FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_NAME = 'raw_titles';
-
-    SELECT COLUMN_NAME, DATA_TYPE
-    FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_NAME = 'raw_credits';
-
 ![Screenshot (910)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6f8ba96b-3b19-46d4-922d-d38cddffd6f6)
 
 ### 4.3. Removing redundant columns
-
-    ALTER TABLE  raw_titles DROP COLUMN index;
-    ALTER TABLE raw_titles DROP COLUMN imdb_id;
-    ALTER TABLE raw_credits DROP COLUMN index;
-
-### 4.4. Looking for null values
-
-* raw_titles table
-
-      SELECT COUNT(*) FROM raw_titles WHERE id IS NULL; -- returns 0
-      SELECT COUNT(*) FROM raw_titles WHERE title IS NULL; -- returns 1 
-      SELECT COUNT(*) FROM raw_titles WHERE type IS NULL; -- returns 0
-      SELECT COUNT(*) FROM raw_titles WHERE release_year IS NULL;  -- returns 0
-      SELECT COUNT(*) FROM raw_titles WHERE runtime = 0; -- returns 24
-      SELECT COUNT(*) FROM raw_titles WHERE genres IS NULL; -- returns 0. There are no null values in this column but there are some values with [] which are essentially null values but with empty string.
-      SELECT COUNT(*) FROM raw_titles WHERE genres= '[]'; -- There are 68 of them
-      SELECT COUNT(*) FROM raw_titles WHERE production_countries IS NULL; -- returns 0. Same as genres, there are values with [] which are null values with empty string.
-      SELECT COUNT(*) FROM raw_titles WHERE production_countries= '[]'; -- returns 232
-      SELECT  type, COUNT(*) AS nulls FROM raw_titles WHERE seasons IS NULL GROUP BY type; -- returns 3759 (All Movies, no shows) 
-      SELECT COUNT(*) FROM raw_titles WHERE imdb_score is null AND imdb_votes IS NULL; -- returns 523
-      SELECT COUNT(*) FROM raw_titles WHERE imdb_score is null OR imdb_votes IS NULL; -- returns 539
-
-* raw_credits table
-
-      SELECT COUNT(*) FROM raw_credits WHERE person_id IS NULL;  -- returns 0
-      SELECT COUNT(*) FROM raw_credits WHERE id IS NULL;  -- returns 0
-      SELECT COUNT(*) FROM raw_credits WHERE name IS NULL;  -- returns 0
-      SELECT COUNT(*) FROM raw_credits WHERE character IS NULL;  -- returns 9627
-  
+### 4.4. Looking for null values  
 So there are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
 
 ### 4.5. Removing the null values
@@ -222,32 +134,9 @@ The imdb_score and imdb_votes have 539 null values altogether. I can do any of t
   4. Another approach is to use a string value such as 'No information' or 'N/A' to represent missing data. However, this approach requires converting the column to a string datatype first, which may not be ideal if I need to perform calculations on the column.
   5. Or, removing the rows altogether. Removing these rows with null values will leave us with 5806 - 1- 24 - 532 = 5249 rows which will not affect the analysis much.
 
-    DELETE FROM raw_titles
-    WHERE title IS NULL 
-       OR runtime = 0 
-       OR imdb_score IS NULL
-       OR imdb_votes IS NULL;
-
 ### 4.6. Looking for duplicate values
 
-In raw_titles table 
-    
-    SELECT id, COUNT(id) as count
-    FROM raw_titles
-    GROUP BY id
-    HAVING COUNT(id) >1 ;
-
-Since id is the primary key in raw_titles table, there must be unique non-duplicate values. The query returned 0 rows which means there are no duplicate values in this table. 
-
-In raw_credits table
-
-    SELECT id, person_id, COUNT(*) as count
-    FROM raw_credits
-    GROUP BY id, person_id, role
-    HAVING COUNT(*) > 1
-    ORDER BY count DESC LIMIT 10;
-
-
+In raw_titles table Since id is the primary key in raw_titles table, there must be unique non-duplicate values. The query returned 0 rows which means there are no duplicate values in this table. 
 ![Screenshot (911)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e964f551-fcfe-464f-8a33-616612137a32)
 
     SELECT t.title, c.name, c.character, c.role
@@ -272,19 +161,7 @@ There are no duplicate values. But there are entries with same id and person_id 
 
 ### 4.7. Changing the cases of the texts into Proper case
 
-    UPDATE raw_titles SET type = initcap(type);
-    UPDATE raw_titles SET title= initcap(title);
-    UPDATE raw_titles SET genres= initcap(genres);
-    UPDATE raw_credits SET role = initcap(role);
-    UPDATE raw_credits SET name = initcap(name);
-
-
 ### 4.8. Trimming the white, leading and trailing spaces
-
-    UPDATE raw_credits SET name = TRIM(name);
-    UPDATE raw_credits SET character = TRIM(character);
-    UPDATE raw_titles SET title = TRIM(title);
-    UPDATE raw_titles SET genres = TRIM(genres);
 
 ### 4.9. String manipulation
 
@@ -294,63 +171,24 @@ The columns production_countries and genres look like this in this image below. 
 
 ![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/53bd55c4-6667-4d5c-a070-8e0802265c24)
 
-Adding a new columns country and genre in the raw_titles table to hold the new values -
-
-    ALTER TABLE raw_titles ADD COLUMN country TEXT;
-    ALTER TABLE raw_titles ADD COLUMN genre TEXT;
-    UPDATE raw_titles SET country = SUBSTRING(production_countries, 2, (length(production_countries)-2)) WHERE id=id;
-    UPDATE raw_titles SET genre =  SUBSTRING(genres, 2, (length(genres)-2)) WHERE id=id;
-
 #### 4.9.2 REMOVING THE '' (quotation marks) FROM THE genre AND country COLUMNS
-
-    UPDATE raw_titles SET genre = REPLACE(genre, '''', '') WHERE genre LIKE '%''%';
-    UPDATE raw_titles SET country = REPLACE(country, '''', '') WHERE country LIKE '%''%';
-
-After removing the brackets and quotation marks, the columns look like this -
 
 ![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
 
 ### 4.10. Replacing the null values with default values 
 
 #### 4.10.1 SETTING THE NULL VALUES IN character COLUMN TO 'No information'
-
-    UPDATE raw_credits SET character = 'No information' WHERE character IS NULL;
-    UPDATE raw_credits SET character = 'Director' WHERE role = 'Director';
-
 #### 4.10.2 SETTING THE NULL VALUES IN seasons TO 0 WHICH CORRESPONDS TO MOVIES
-
-    UPDATE raw_titles SET seasons = 0 WHERE seasons IS NULL;
-
 #### 4.10.3 SETTING THE NULL VALUES IN age_certification TO 'Others'    
-    
-    UPDATE raw_titles SET age_certification = 'Others' WHERE age_certification IS NULL;
-
 #### 4.10.4 SETTING THE VALUES WITH [] IN genres COLUMN WITH 'N/A'
-
-    UPDATE raw_titles SET genres = 'No information' WHERE genres = '[]';
-
 #### 4.10.5 SETTING THE VALUES WITH [] IN production_countries COLUMN WITH 'N/A'
-
-    UPDATE raw_titles SET production_countries  = 'No information' WHERE production_countries  = '[]';
 
 ### 4.11. Dealing with titles
 
-#### 4.11.1 SOME UNUSUAL TITLES
-There are 4 shows/movies with names formatted as dates in csv file. So I looked into them closely. I used a left join from (raw_titles to raw_credits) to get all the information about these 4 items from both tables.
-
-    SELECT t.id, t.title, t.runtime,t.release_year, c.person_id, c.id, c.name, c.character, c.role
-    FROM raw_titles t 
-    LEFT JOIN raw_credits c
-    ON t.id=c.id
-    WHERE t.id IN ('tm197423','tm461427', 'tm348993','tm1011248');
-
-When I double checked on internet, I found out that there are indeed shows named '15 August', '22 July', 'October 1' and '30.March' but not '30 March'. So I renamed the last one. 
 
 Renaming title '30 March' to '30.March' 
 
     UPDATE raw_titles SET title = '30.March' WHERE title = '30 March';
-
-(one point to remember : there are no details about this movie in raw_credits)
 
 #### 4.11.2 SOME TITLES STARTING WITH '#'
 
@@ -373,9 +211,6 @@ Now that we've created a trimmed, properly capitalized and cleaned columns genre
     
 ### 4.13. Renaming the 'raw_titles' table to 'titles'
 
-    DROP TABLE IF EXISTS titles;
-    ALTER TABLE raw_titles RENAME TO titles;
-
 ### 4.14. Concatenating multiple characters into a single row
 
 In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
@@ -391,64 +226,17 @@ This query will group the rows in the raw_credits table by person_id,id,name and
 
 ![Screenshot (909)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6c7c7fbe-ee1b-4751-ab6a-1a0822ae068a)
 
-showing some of the concatenated values
-     
-    SELECT character FROM credits WHERE character ~'^.*,+' LIMIT 10;
-
-checking for duplicates in the credits table
-
-    SELECT id, person_id, COUNT(*) AS count 
-    FROM credits 
-    GROUP BY id, person_id 
-    HAVING COUNT(*) >1 
-    ORDER BY COUNT(*) DESC 
-    LIMIT 10;
-
-
-![Screenshot (916)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/78eaf824-a06a-451e-8b51-ef65799ade7f)
-
-It shows there are atmost 2 people with same id and person_id which implies that one entry is for actor and one for director role.
 
 ### 4.15. Checking the number of records in the cleaned tables
 
-    SELECT COUNT(*) FROM titles; -- Returns 5249 rows
-    SELECT * from raw_titles limit 6;
-   
-![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
     
-    SELECT COUNT(*) FROM credits; -- Returns 77213 [double check it] rows
-    SELECT * from raw_titles limit 6;
-  
+![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
+
 ![Screenshot (914)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0d3f9333-206b-48ac-ace6-0e0ab5b40aee)
 
 ### 4.15. Checking once more for null values in the cleaned tables
 
-    SELECT * FROM titles WHERE title IS NULL
-    OR type IS NULL 
-    OR age_certification IS NULL 
-    OR runtime = 0 
-    OR seasons IS NULL 
-    OR country IS NULL 
-    OR genre IS NULL 
-    OR type IS NULL 
-    OR imdb_score IS NULL 
-    OR imdb_votes IS NULL; -- Returns 0
-
-    SELECT * FROM credits WHERE name IS NULL 
-    OR character IS NULL 
-    OR role IS NULL; -- Returns 0
-
-### 4.17. Updating the null values in the new tables 
-
-Unfortunately, the null values in country and genre tables have been stored as empty strings instead of 'No information'. So I update them here once again, before starting normalizing them. 
-
-    UPDATE titles SET country = 'No information' WHERE country = '';
-    UPDATE titles SET genre = 'No information' WHERE genre = '';
-
-### 4.18.  Save the new tables and import them as cleaned csv files
-
-    \copy titles TO 'C:/Users/Dell/Desktop/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
-    \copy credits TO 'C:/Users/Dell/Desktop/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
+### 4.17.  Save the new tables and import them as cleaned csv files
 
 # Database Design:
 
