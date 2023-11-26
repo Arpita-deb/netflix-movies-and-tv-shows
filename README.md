@@ -275,15 +275,18 @@ This database is normalized upto 3rd Normal Form. It ensures that -
    * [The Ultimate Guide to Data Cleaning in SQL](https://medium.com/@sqlfundamentals/the-ultimate-guide-to-data-cleaning-in-sql-74855cce28c8)
 
 3. Data Design
+   
    * [Data Modelling - IBM](https://www.ibm.com/topics/data-modeling)
    * [From Spreadsheets to Database - A Comprehensive study of Database Normalization](https://medium.com/@arpita_deb/from-spreadsheets-to-database-c2e8dbeb6a76)
    * [Books Database Normalization](https://github.com/Arpita-deb/Books-Database-Normalization.git)
-   * [](https://learnsql.com/blog/sql-join-unmatched-rows/)
-   * [](https://www.postgresqltutorial.com/postgresql-views/managing-postgresql-views/)
-   * [](https://www.databasestar.com/how-to-design-a-database/)
-   * [one to many relationship]()
-   * [Many-to-many Relationship](https://youtu.be/1eUn6lsZ7c4?si=-mMSnZjhFoBrLHLg)
-   * [7 database design mistakes](https://youtu.be/s6m8Aby2at8?si=wPD1blBcAi_ZSuCW)
+   * [How to Keep Unmatched Rows When You Join two Tables in SQL](https://learnsql.com/blog/sql-join-unmatched-rows/)
+   * [Managing PostgreSQL Views](https://www.postgresqltutorial.com/postgresql-views/managing-postgresql-views/)
+   * [6 Easy And Actionable Steps On How To Design A Database](https://www.databasestar.com/how-to-design-a-database/)
+   * [Database Design One to Many Relationships: 7 Steps to Create Them (With Examples) - YouTube Video](https://youtu.be/-C2olg3SfvU?si=CHkSvnP0owU-zBbG)
+   * [How to Correctly Define Many-To-Many Relationships in Database Design - YouTube Video](https://youtu.be/1eUn6lsZ7c4?si=-mMSnZjhFoBrLHLg)
+   * [7 Database Design Mistakes to Avoid (With Solutions) - YouTube Video](https://youtu.be/s6m8Aby2at8?si=wPD1blBcAi_ZSuCW)
      
-4. Regular Expressions
-5. Data Analysis 
+5. Regular Expressions
+   * [Regular Expressions in PostgreSQL](https://youtu.be/bRly46jfdMk?si=2kjYUxmUJJgYPmLB)
+
+6. Data Analysis 
