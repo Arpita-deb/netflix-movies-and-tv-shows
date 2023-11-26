@@ -454,39 +454,39 @@ Unfortunately, the null values in country and genre tables have been stored as e
 
 By the end of data cleaning process we end up with two clean tables, *titles* containing all information on shows/movies and *credits* containing the information of actors and directors associated with each show. In both tables, the one important attribute that uniquely identifies a show is its **id**. Each table has this column that helps us join the two tables together. 
 
+![initial data dist](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/5e10a804-e422-477f-8414-d5e4ceef96c0)
+
 But the titles table contain 5249 unique entries of shows, while credits show contain information for 5434 shows. Clearly, these extra rows in credits table have no equivalent data in shows table. So,we'll these redundant rows that would not help us in the analysis.
 
-[image]
+![Show](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/764b48d0-8276-4724-926b-fda2334e00d9)
 
-In order to do that, we can create a third table (or view) that joins the two tables together omitting the extra rows. 
+Now that we have one table that has all the non-null entries, we are ready to normalize it. 
 
-    CREATE VIEW netflix AS 
-    SELECT t.id, t.title,t.type, t.release_year, t.age_certification,t.runtime,t.seasons, t.imdb_score, t.imdb_votes, t.genre, t.country,c.person_id, c.name,c.role,c.character
-    FROM credits c
-    INNER JOIN titles t
-    ON c.id = t.id;
-
-This table contains 72688 rows of data.
-
-Data modeling is the process of creating a visual representation of either a whole information system or parts of it to communicate connections between data points and structures. The goal is to illustrate the types of data used and stored within the system, the relationships among these data types, the ways the data can be grouped and organized and its formats and attributes.
+Database design is the organization of data according to a database model. The designer determines what data must be stored and how the data elements interrelate.
 
 Like any design process, database and information system design begins at a high level of abstraction and becomes increasingly more concrete and specific. Data models can generally be divided into three categories, which vary according to their degree of abstraction. The process will start with a conceptual model, progress to a logical model and conclude with a physical model.
 
-## Conceptual data models
+## Conceptual data model
 
 They are also referred to as domain models and offer a big-picture view of what the system will contain, how it will be organized, and which business rules are involved. Conceptual models are usually created as part of the process of gathering initial project requirements. Typically, they include entity classes (defining the types of things that are important for the business to represent in the data model), their characteristics and constraints, the relationships between them and relevant security and data integrity requirements. Any notation is typically simple.
 
-## Logical data models
+![conceptual model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/229bc1b8-7799-426b-866e-20d9a0fb9184)
+
+## Logical data model
 
 They are less abstract and provide greater detail about the concepts and relationships in the domain under consideration. One of several formal data modeling notation systems is followed. These indicate data attributes, such as data types and their corresponding lengths, and show the relationships among entities. Logical data models don’t specify any technical system requirements. This stage is frequently omitted in agile or DevOps practices. Logical data models can be useful in highly procedural implementation environments, or for projects that are data-oriented by nature, such as data warehouse design or reporting system development.
 
-## Physical data models
+![logical model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/371cd6c6-d3ef-4fae-8be1-dd3e979cd4ca)
+
+## Physical data model
 
 They provide a schema for how the data will be physically stored within a database. As such, they’re the least abstract of all. They offer a finalized design that can be implemented as a relational database, including associative tables that illustrate the relationships among entities as well as the primary keys and foreign keys that will be used to maintain those relationships. Physical data models can include database management system (DBMS)-specific properties, including performance tuning.
 
+![physical model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/1c972f98-6226-4768-9656-537d884cb181)
+
 This database is normalized upto 3rd Normal Form. It ensures that -
 
-1. Each table have columns that only store a single piece of data and that data is accessed through a unique key (Primary Key) or a composite key (combination of primary keys). [First Normal Form]
+1. Each table have columns that only store a single piece of data and that data is accessed through a unique key (Primary Key). [First Normal Form]
 2. Each Non-key attributes (i.e., columns other than primary key(s) are functionally dependent on the primary key only. [Second Normal Form]
 3. There is no transitional dependency of the non-key attributes i.e., each table has columns that are dependent only on the key. [Third Normal Form]
 
