@@ -223,25 +223,26 @@ But the titles table contain 5249 unique entries of shows, while credits show co
 
 ![Show](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/764b48d0-8276-4724-926b-fda2334e00d9)
 
-Now that we have one table that has all the non-null entries, we are ready to normalize it. 
+Using Inner Join we selected the data that are present in both tables and saved them as the third table *netflix_table*. Now that we have one table that has all the non-null entries, we are ready to normalize it. 
+
 
 Database design is the organization of data according to a database model. The designer determines what data must be stored and how the data elements interrelate.
 
 Like any design process, database and information system design begins at a high level of abstraction and becomes increasingly more concrete and specific. Data models can generally be divided into three categories, which vary according to their degree of abstraction. The process will start with a conceptual model, progress to a logical model and conclude with a physical model.
 
-## Conceptual data model
+* ## Conceptual data model:
 
-They are also referred to as domain models and offer a big-picture view of what the system will contain, how it will be organized, and which business rules are involved. Conceptual models are usually created as part of the process of gathering initial project requirements. Typically, they include entity classes (defining the types of things that are important for the business to represent in the data model), their characteristics and constraints, the relationships between them and relevant security and data integrity requirements. Any notation is typically simple.
+They are also referred to as domain models and offer a big-picture view of what the system will contain, how it will be organized, and which business rules are involved. Conceptual models are usually created as part of the process of gathering initial project requirements. Typically, they include entity classes (defining the types of things that are important for the business to represent in the data model), their characteristics and constraints, the relationships between them and relevant security and data integrity requirements.
 
 ![conceptual model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/229bc1b8-7799-426b-866e-20d9a0fb9184)
 
-## Logical data model
+* ## Logical data model:
 
 They are less abstract and provide greater detail about the concepts and relationships in the domain under consideration. One of several formal data modeling notation systems is followed. These indicate data attributes, such as data types and their corresponding lengths, and show the relationships among entities. Logical data models don’t specify any technical system requirements. This stage is frequently omitted in agile or DevOps practices. Logical data models can be useful in highly procedural implementation environments, or for projects that are data-oriented by nature, such as data warehouse design or reporting system development.
 
 ![logical model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/371cd6c6-d3ef-4fae-8be1-dd3e979cd4ca)
 
-## Physical data model
+* ## Physical data model:
 
 They provide a schema for how the data will be physically stored within a database. As such, they’re the least abstract of all. They offer a finalized design that can be implemented as a relational database, including associative tables that illustrate the relationships among entities as well as the primary keys and foreign keys that will be used to maintain those relationships. Physical data models can include database management system (DBMS)-specific properties, including performance tuning.
 
@@ -253,7 +254,7 @@ This database is normalized upto 3rd Normal Form. It ensures that -
 2. Each Non-key attributes (i.e., columns other than primary key(s) are functionally dependent on the primary key only. [Second Normal Form]
 3. There is no transitional dependency of the non-key attributes i.e., each table has columns that are dependent only on the key. [Third Normal Form]
 
-# Data Analyze:
+# Data Analysis:
 # Data Visualization:
 # Results:
 
@@ -277,6 +278,12 @@ This database is normalized upto 3rd Normal Form. It ensures that -
    * [Data Modelling - IBM](https://www.ibm.com/topics/data-modeling)
    * [From Spreadsheets to Database - A Comprehensive study of Database Normalization](https://medium.com/@arpita_deb/from-spreadsheets-to-database-c2e8dbeb6a76)
    * [Books Database Normalization](https://github.com/Arpita-deb/Books-Database-Normalization.git)
-
+   * [](https://learnsql.com/blog/sql-join-unmatched-rows/)
+   * [](https://www.postgresqltutorial.com/postgresql-views/managing-postgresql-views/)
+   * [](https://www.databasestar.com/how-to-design-a-database/)
+   * [one to many relationship]()
+   * [Many-to-many Relationship](https://youtu.be/1eUn6lsZ7c4?si=-mMSnZjhFoBrLHLg)
+   * [7 database design mistakes](https://youtu.be/s6m8Aby2at8?si=wPD1blBcAi_ZSuCW)
+     
 4. Regular Expressions
-5. 
+5. Data Analysis 
