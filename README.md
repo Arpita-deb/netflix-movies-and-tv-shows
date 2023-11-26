@@ -181,7 +181,7 @@ So I decided to remove these rows with null values.
 ![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
 
   * **14.2 - Replacing the null values with default values** 
-  * **14.3 - Setting the Null balues in character column to 'No information'**
+  * **14.3 - Setting the Null values in character column to 'No information'**
   * **14.4 - Setting the null values in seasons to 0 which corresponds to movies**
   * **14.5 - Setting the null values in age_certification to 'Others'**    
   * **14.6 - Setting the values with [] in genres column with 'N/A'**
