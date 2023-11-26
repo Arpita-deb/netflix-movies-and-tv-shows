@@ -107,25 +107,33 @@ For this analysis I'll be using 2 raw files raw_credits and raw_titles which con
 
 # Data cleaning:
 
-## Step 1 - Making a backup copy of the original data in csv format.
+* ### **Step 1 - Making a backup copy of the original data in csv format**
 
-## Step 2 - Creating a new database called 'netflix' in PostgreSQL Database system 
-## Step 3 - Creating the tables to hold the data loaded from csv files
-## Step 4 -Loading the data into the raw_titles and raw_credits table
-## Step 5 - Cleaning the data
+* ### **Step 2 - Creating a new database called 'netflix' in PostgreSQL Database system**
 
-### 4.1. Checking the size of the dataset
+* ### **Step 3 - Creating the tables to hold the data loaded from csv files**
 
-### 4.2. Checking the datatypes
+* ### **Step 4 - Loading the data into the raw_titles and raw_credits table**
+
+* ### **Step 5 - Cleaning the data**
+
+* ### **Step 6 - Checking the size of the dataset**
+
+* ### **Step 7 - Checking the datatypes**
+
 ![Screenshot (910)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6f8ba96b-3b19-46d4-922d-d38cddffd6f6)
 
-### 4.3. Removing redundant columns
-### 4.4. Looking for null values  
-So there are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
+* ### **Step 8 - Removing redundant columns**
+  
+  Deleting the index, imdb_id from raw_titles table and index from raw_credits column. 
 
-### 4.5. Removing the null values
+* ### **Step 9 - Looking for null values** 
 
-I have 1 null value in title column, which needs to be deleted as the title column needs to be unique and non nullable. There are 24 rows with 0 runtime which doesn't make sense, so they're also to be deleted. 
+  So there are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
+
+* ### **Step 10 - Removing the null values**
+
+  I have 1 null value in title column, which needs to be deleted as the title column needs to be unique and non nullable. There are 24 rows with 0 runtime which doesn't make sense, so they're also to be deleted. 
 The imdb_score and imdb_votes have 539 null values altogether. I can do any of the following with these 2 columns -
   
   1. Replace null values with 0, but it may not be the best approach, as it could lead to inaccurate results.
@@ -133,87 +141,62 @@ The imdb_score and imdb_votes have 539 null values altogether. I can do any of t
   3. Leave null values as they are. But it can affect the analysis if I have to perform calculations. Null values can cause errors in calculations and can also affect the accuracy of the results. For example, if I'm calculating the average imdb_score of a set of movies and some of the imdb_score values are null, the average will be skewed and may not be an accurate representation of the data.
   4. Another approach is to use a string value such as 'No information' or 'N/A' to represent missing data. However, this approach requires converting the column to a string datatype first, which may not be ideal if I need to perform calculations on the column.
   5. Or, removing the rows altogether. Removing these rows with null values will leave us with 5806 - 1- 24 - 532 = 5249 rows which will not affect the analysis much.
+So I decided to remove these rows with null values.
 
-### 4.6. Looking for duplicate values
+* ### **Step 11 - Looking for duplicate values**
 
-In raw_titles table Since id is the primary key in raw_titles table, there must be unique non-duplicate values. The query returned 0 rows which means there are no duplicate values in this table. 
-![Screenshot (911)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e964f551-fcfe-464f-8a33-616612137a32)
+  There are no duplicate values in raw_titles table. There are no duplicate values in credits table . But there are entries with same id and person_id but with different character or role. Now I want to have a unique combination of person_id and id, with unique role i.e for either director or actor and concatenate all the character types into a single character. I'll do it later.
 
-    SELECT t.title, c.name, c.character, c.role
-    FROM raw_titles t
-    JOIN raw_credits c ON t.id = c.id
-    WHERE c.id ='tm127384' AND c.person_id =11475;
+      SELECT t.title, c.name, c.character, c.role
+      FROM raw_titles t
+      JOIN raw_credits c ON t.id = c.id
+      WHERE c.id ='tm127384' AND c.person_id =11475;
 
-    SELECT t.title, c.name, c.character, c.role
-    FROM raw_titles t
-    JOIN raw_credits c ON t.id = c.id
-    WHERE c.id ='tm226362' AND c.person_id =307659;
+      SELECT t.title, c.name, c.character, c.role
+      FROM raw_titles t
+      JOIN raw_credits c ON t.id = c.id
+      WHERE c.id ='tm226362' AND c.person_id =307659;
 
-    SELECT t.title, c.name, c.character, c.role
-    FROM raw_titles t
-    JOIN raw_credits c ON t.id = c.id
-    WHERE c.id ='tm228574' AND c.person_id =65832;
+      SELECT t.title, c.name, c.character, c.role
+      FROM raw_titles t
+      JOIN raw_credits c ON t.id = c.id
+      WHERE c.id ='tm228574' AND c.person_id =65832;
 
 ![Screenshot (912)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c612e450-3a0c-49f6-a4c8-7b736b63979e)
 
-There are no duplicate values. But there are entries with same id and person_id but with different character or role. Now I want to have a unique combination of person_id and id, with unique role i.e for either director or actor and concatenate all the character types into a single character. I'll do it later.
+* ### **Step 12 - Changing the cases of the texts into Proper case**
 
+* ### **Step 13 - Trimming the white, leading and trailing spaces**
 
-### 4.7. Changing the cases of the texts into Proper case
+* ### **Step 14 - String manipulation**
 
-### 4.8. Trimming the white, leading and trailing spaces
-
-### 4.9. String manipulation
-
-#### 4.9.1 REMOVING THE [ ] BRACKETS FROM genres, production_countries COLUMNS
-
-The columns production_countries and genres look like this in this image below. They need to be cleaned.
+  * **14.1 -  Removing the [ ] and '' (quotation marks) from genres and production_countries columns**
+    
+  The columns production_countries and genres look like this in this image below.
 
 ![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/53bd55c4-6667-4d5c-a070-8e0802265c24)
 
-#### 4.9.2 REMOVING THE '' (quotation marks) FROM THE genre AND country COLUMNS
+  After removing the [ ] and '', the rows look like this now -
 
 ![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
 
-### 4.10. Replacing the null values with default values 
+  * **14.2 - Replacing the null values with default values** 
+  * **14.3 - Setting the Null balues in character column to 'No information'**
+  * **14.4 - Setting the null values in seasons to 0 which corresponds to movies**
+  * **14.5 - Setting the null values in age_certification to 'Others'**    
+  * **14.6 - Setting the values with [] in genres column with 'N/A'**
+  * **14.7 - Setting the values with [] in production_countries column with 'N/A'**
 
-#### 4.10.1 SETTING THE NULL VALUES IN character COLUMN TO 'No information'
-#### 4.10.2 SETTING THE NULL VALUES IN seasons TO 0 WHICH CORRESPONDS TO MOVIES
-#### 4.10.3 SETTING THE NULL VALUES IN age_certification TO 'Others'    
-#### 4.10.4 SETTING THE VALUES WITH [] IN genres COLUMN WITH 'N/A'
-#### 4.10.5 SETTING THE VALUES WITH [] IN production_countries COLUMN WITH 'N/A'
+* ### **Step 15 - Modifying the titles**
 
-### 4.11. Dealing with titles
+  * **15.1 - Renaming title '30 March' to '30.March'** 
+  * **15.2 - Replacing '#' from the beginning of some titles**
 
+* ### **Step 16 - Removing the extra columns**
 
-Renaming title '30 March' to '30.March' 
+* ### **Step 17 - Concatenating multiple characters into a single row**
 
-    UPDATE raw_titles SET title = '30.March' WHERE title = '30 March';
-
-#### 4.11.2 SOME TITLES STARTING WITH '#'
-
-I used a simple Regular Expression to filter only whose titles that doesn't start either with any numerical digit (0=9) or English alphabets (A-Z).
-
-    SELECT title FROM raw_titles WHERE title !~'^[0-9A-Z]' ORDER BY title;
-
-![Screenshot (915)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/2bbc0b38-6ac9-4bb1-a8e6-02f24783feef)
-
-It returns 13 rows which starts with a #. So to remove that character from the left side of the string, I used LTRIM function.
-
-    UPDATE raw_titles SET title = LTRIM(title, '#') WHERE title !~'^[0-9A-Z]';
-
-### 4.12. Removing the extra columns
-
-Now that we've created a trimmed, properly capitalized and cleaned columns genre and country, we can get rid of the former columns genres and production_countries.
- 
-    ALTER TABLE raw_titles DROP COLUMN genres;
-    ALTER TABLE raw_titles DROP COLUMN production_countries;
-    
-### 4.13. Renaming the 'raw_titles' table to 'titles'
-
-### 4.14. Concatenating multiple characters into a single row
-
-In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
+  In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
 
 ![Screenshot (908)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/4f18d8a6-283a-484f-b40e-dcc854855754)
     
@@ -222,21 +205,13 @@ In a film or show, there are multiple roles that are played by more than one per
 
     INSERT INTO credits (person_id, id, name,role, character) SELECT person_id, id, name, role, STRING_AGG(character, ' / ') FROM raw_credits GROUP BY person_id, id, name, role;
 
-This query will group the rows in the raw_credits table by person_id,id,name and role and concatenate the values in the character column for each group using the string_agg function. The resulting table will have 5 columns: person_id,id, name, character, role where character contains the concatenated values of the character column for each group. This table now has 77122 entries. 
+  This query groups the rows in the raw_credits table by person_id,id,name and role and concatenate the values in the character column for each group using the string_agg function. The resulting table will have 5 columns: person_id,id, name, character, role where character contains the concatenated values of the character column for each group. This table now has 77122 entries. 
 
 ![Screenshot (909)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6c7c7fbe-ee1b-4751-ab6a-1a0822ae068a)
 
+* ### **Step 18 - Renaming the 'raw_titles' table to 'titles'**
 
-### 4.15. Checking the number of records in the cleaned tables
-
-    
-![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
-
-![Screenshot (914)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0d3f9333-206b-48ac-ace6-0e0ab5b40aee)
-
-### 4.15. Checking once more for null values in the cleaned tables
-
-### 4.17.  Save the new tables and import them as cleaned csv files
+* ### **Step 19 - Saving the new tables and import them as cleaned csv files**
 
 # Database Design:
 
@@ -244,7 +219,7 @@ By the end of data cleaning process we end up with two clean tables, *titles* co
 
 ![initial data dist](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/5e10a804-e422-477f-8414-d5e4ceef96c0)
 
-But the titles table contain 5249 unique entries of shows, while credits show contain information for 5434 shows. Clearly, these extra rows in credits table have no equivalent data in shows table. So,we'll these redundant rows that would not help us in the analysis.
+But the titles table contain 5249 unique entries of shows, while credits show contain information for 5434 shows. Clearly, these extra rows in credits table have no equivalent data in shows table. So,we'll remove these redundant rows that would not help us in the analysis.
 
 ![Show](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/764b48d0-8276-4724-926b-fda2334e00d9)
 
