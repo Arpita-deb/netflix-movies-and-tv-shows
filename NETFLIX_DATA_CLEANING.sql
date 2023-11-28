@@ -1,7 +1,5 @@
--- DATA CLEANING
-
+-- To run the script, execute this code
 -- \i C:/Users/Dell/Desktop/Netflix/NETFLIX_DATA_CLEANING.sql
-
 
 -- Step 1 - Creating a new database 'netflix'
 
@@ -10,7 +8,6 @@ CREATE DATABASE netflix WITH OWNER arpita;
 
 -- entering into the database 
 \c netflix
-
 
 -- Step 2 - Creating new tables in the database
 
@@ -51,12 +48,9 @@ role VARCHAR(8)
 SHOW client_encoding;
 SET client_encoding TO UTF8;
 
-
-
 --Step 3 - loading the data into the raw_titles table
 
 \copy raw_titles(index,id,title,type,release_year,age_certification,runtime,genres,production_countries,seasons,imdb_id,imdb_score,imdb_votes) FROM 'C:\Users\Dell\Desktop\Netflix\archive\raw_titles.csv' WITH DELIMITER ',' CSV HEADER;
-
 
 \copy raw_credits(index,person_id,id,name,character,role) FROM 'C:\Users\Dell\Desktop\Netflix\archive\raw_credits.csv' WITH DELIMITER ',' CSV HEADER;
 
@@ -70,16 +64,10 @@ SELECT *
 FROM raw_credits 
 LIMIT 10;
 
--- DATA CLEANING
-
-
-
 -- Step 4 - Checking the size of the dataset
 
 SELECT COUNT(*) FROM raw_titles;
 SELECT COUNT(*) FROM raw_credits;
-
-
 
 -- Step 5  - Checking the data types
 
@@ -91,15 +79,11 @@ SELECT COLUMN_NAME, DATA_TYPE
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = 'raw_credits';
 
-
-
 -- Step 6 - Removing the redundant columns
 
 ALTER TABLE  raw_titles DROP COLUMN index;
 ALTER TABLE raw_titles DROP COLUMN imdb_id;
 ALTER TABLE raw_credits DROP COLUMN index;
-
-
 
 -- Step 7 - Looking for null values
 
@@ -125,8 +109,6 @@ SELECT COUNT(*) FROM raw_credits WHERE id IS NULL;
 SELECT COUNT(*) FROM raw_credits WHERE name IS NULL;
 SELECT COUNT(*) FROM raw_credits WHERE character IS NULL;
 
-
-
 -- Step 8 - Deleting the null values
 
 DELETE FROM raw_titles
@@ -134,8 +116,6 @@ WHERE title IS NULL
        OR runtime = 0 
        OR imdb_score IS NULL
        OR imdb_votes IS NULL;
-
-
 
 -- Step 9 - Looking for duplicates
 
@@ -157,7 +137,6 @@ FROM raw_credits
 GROUP BY id, person_id, role
 HAVING COUNT(*) > 1
 ORDER BY count desc limit 10;
-
 
 -- instances of duplicate values differing only in character or role column
 
@@ -184,14 +163,12 @@ UPDATE raw_titles SET genres= initcap(genres);
 UPDATE raw_credits SET role = initcap(role);
 UPDATE raw_credits SET name = initcap(name);
 
-
 -- Step 11 - Trimming leading and trailing spaces
 
 UPDATE raw_credits SET name = TRIM(name);
 UPDATE raw_credits SET character = TRIM(character);
 UPDATE raw_titles SET title = TRIM(title);
 UPDATE raw_titles SET genres = TRIM(genres);
-
 
 -- Step 12 - Replacing the Null Values
 
@@ -224,8 +201,6 @@ WHERE genres = '[]';
 UPDATE raw_titles 
 SET production_countries = 'N/A' 
 WHERE production_countries = '[]';
-
-
 
 -- Step 13 - Removing the [ ] and ' ' from production_countries and genre columns
 
@@ -262,9 +237,8 @@ UPDATE raw_titles
 SET country = 'LB' 
 WHERE country='Lebanon';
 
-
-
 -- Step 14 - Looking closely at some unusual titles
+
 -- There are 4 shows/movies with names formatted as dates.
 -- A left join from (raw_titles to raw_credits) is used to get all the information.
 
@@ -282,7 +256,6 @@ WHERE title = '30 March';
 
 -- Step 15- Some more unusual titles starting with '#'
 
-
 -- The SQL query selects the title column from the raw_titles table. 
 -- The WHERE clause filters out the rows where the title column starts 
 -- with a digit or an uppercase letter.
@@ -298,16 +271,13 @@ UPDATE raw_titles
 SET title = LTRIM(title, '#') 
 WHERE title ~ '^#';
 
-
-
 -- Step-16 Removing the extra columns
 
 ALTER TABLE raw_titles DROP COLUMN genres;
 ALTER TABLE raw_titles DROP COLUMN production_countries;
 
-
-
 --Step - 17 Concatenating the character column
+
 -- creating a new credits table to hold the concatenated entries
 DROP TABLE IF EXISTS credits;
 
@@ -333,8 +303,6 @@ SELECT *
 FROM credits 
 WHERE person_id = 307659 AND id = 'tm226362';
 
-
-
 -- Step-18 Looking for duplicates in the new 'credits' table
 
 SELECT id, person_id, COUNT(*) AS count 
@@ -343,8 +311,6 @@ GROUP BY id, person_id
 HAVING COUNT(*) >1 
 ORDER BY COUNT(*) DESC 
 LIMIT 10;
-
-
 
 -- Step - 19 Creating the cleaned 'titles' table
 
@@ -360,8 +326,6 @@ INSERT INTO titles(id,title,type,release_year,age_certification,runtime,seasons,
 SELECT * 
 FROM raw_titles 
 WHERE id = id;
-
-
 
 --Step - 20 Checking for null values in cleaned tables
 
@@ -384,15 +348,13 @@ WHERE name IS NULL
 OR character IS NULL 
 OR role IS NULL;
 
-
 -- Step 21 - Fine Adjustments
 
 UPDATE titles SET genre = 'N/A' WHERE genre = '/';
 UPDATE titles SET country = 'N/A' WHERE country = '/';
 UPDATE credits SET character = 'N/A' WHERE character = '--';
 
-
--- Step - 20 Importing the new tables as csv files
+-- Step - 22 Importing the new tables as csv files
 
 \copy titles TO 'C:/Users/Dell/Desktop/Netflix/titles_cleaned.csv' DELIMITER ',' CSV HEADER;
 \copy credits TO 'C:/Users/Dell/Desktop/Netflix/credits_cleaned.csv' DELIMITER ',' CSV HEADER;
