@@ -31,7 +31,7 @@ The goal of this project is to find the answers to these following questions -
 
 1. Google Slides - to create the project proposal
 2. PostgreSQL (SQL Shell) - for data cleaning, data normalization and analysis process
-3. Tableau - to create data visualization
+3. Datawrapper - to create data visualizations
 4. GitHub - for documentation 
 
 # Methodologies used:
@@ -53,7 +53,7 @@ The goal of this project is to find the answers to these following questions -
 
 # About the dataset:
 
-The dataset contains 6 files in total namely -
+The dataset contains 6 files in total, namely -
 * Best Movie by Year Netflix.csv
 * Best Movies Netflix.csv
 * Best Show by Year Netflix.csv
@@ -109,31 +109,25 @@ For this analysis I'll be using 2 raw files raw_credits and raw_titles which con
 
 # Data cleaning:
 
-* ### **Step 1 - Making a backup copy of the original data in csv format**
+The following steps were taken to clean the netflix data - 
 
-* ### **Step 2 - Creating a new database called 'netflix' in PostgreSQL Database system**
+* **Step 1** - Made a backup copy of the original data in csv format
 
-* ### **Step 3 - Creating the tables to hold the data loaded from csv files**
+* **Step 2** - Created a new database called 'netflix' in PostgreSQL Database system
 
-* ### **Step 4 - Loading the data into the raw_titles and raw_credits table**
+* **Step 3** - Created the raw_titles and raw_credits tables to hold the data loaded from csv files
 
-* ### **Step 5 - Cleaning the data**
+* **Step 4** - Loaded the data into the raw_titles and raw_credits table
 
-* ### **Step 6 - Checking the size of the dataset**
+* **Step 5** - Checked the size of the dataset
 
-* ### **Step 7 - Checking the datatypes**
+* **Step 6** - Checked the datatypes
 
-![Screenshot (910)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6f8ba96b-3b19-46d4-922d-d38cddffd6f6)
+* **Step 7** - Removed the redundant columns (index, imdb_id from raw_titles and index from raw_credits table) that will not help us in the analysis
 
-* ### **Step 8 - Removing redundant columns**
-  
-  Deleting the index, imdb_id from raw_titles table and index from raw_credits column. 
+* **Step 8** - Looked for null values by counting the number of rows with Null values, 0s or wrong values. There are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
 
-* ### **Step 9 - Looking for null values** 
-
-  So there are null values in titles, runtime, genres, production_countries, imdb_score and imdb votes columns in raw_titles table and in character column in raw_credits table.
-
-* ### **Step 10 - Removing the null values**
+* **Step 9** - After identifying the null values, I decided to remove them from title, runtime, imdb_score and imdb_votes columns. Here is the explanation for removing the values.
 
   I have 1 null value in title column, which needs to be deleted as the title column needs to be unique and non nullable. There are 24 rows with 0 runtime which doesn't make sense, so they're also to be deleted. 
 The imdb_score and imdb_votes have 539 null values altogether. I can do any of the following with these 2 columns -
@@ -143,64 +137,43 @@ The imdb_score and imdb_votes have 539 null values altogether. I can do any of t
   3. Leave null values as they are. But it can affect the analysis if I have to perform calculations. Null values can cause errors in calculations and can also affect the accuracy of the results. For example, if I'm calculating the average imdb_score of a set of movies and some of the imdb_score values are null, the average will be skewed and may not be an accurate representation of the data.
   4. Another approach is to use a string value such as 'No information' or 'N/A' to represent missing data. However, this approach requires converting the column to a string datatype first, which may not be ideal if I need to perform calculations on the column.
   5. Or, removing the rows altogether. Removing these rows with null values will leave us with 5806 - 1- 24 - 532 = 5249 rows which will not affect the analysis much.
+
 So I decided to remove these rows with null values.
 
-* ### **Step 11 - Looking for duplicate values**
-
-  There are no duplicate values in raw_titles table. There are no duplicate values in credits table . But there are entries with same id and person_id but with different character or role. Now I want to have a unique combination of person_id and id, with unique role i.e for either director or actor and concatenate all the character types into a single character. I'll do it later.
-
-      SELECT t.title, c.name, c.character, c.role
-      FROM raw_titles t
-      JOIN raw_credits c ON t.id = c.id
-      WHERE c.id ='tm127384' AND c.person_id =11475;
-
-      SELECT t.title, c.name, c.character, c.role
-      FROM raw_titles t
-      JOIN raw_credits c ON t.id = c.id
-      WHERE c.id ='tm226362' AND c.person_id =307659;
-
-      SELECT t.title, c.name, c.character, c.role
-      FROM raw_titles t
-      JOIN raw_credits c ON t.id = c.id
-      WHERE c.id ='tm228574' AND c.person_id =65832;
+* Step 10 - Checked for duplicate values. There were no duplicate values in both table. But there are entries with same id and person_id but with different character or role like the data shown below. There are multiple entries of one person acting in one particular show/movie but the data is recorded in 2 or more rows for different characters/roles. 
 
 ![Screenshot (912)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c612e450-3a0c-49f6-a4c8-7b736b63979e)
 
-* ### **Step 12 - Changing the cases of the texts into Proper case**
+This increases the number of records in our table. The character column needed to be concatenated into one single row for each person and show_id, for either actor or director role.
 
-* ### **Step 13 - Trimming the white, leading and trailing spaces**
+* **Step 11** - Changed the cases of the texts into Proper case
 
-* ### **Step 14 - String manipulation**
+* **Step 12** - Trimed the white, leading and trailing spaces from the categorical columns
 
-  * **14.1 -  Removing the [ ] and '' (quotation marks) from genres and production_countries columns**
-    
-  The columns production_countries and genres look like this in this image below.
+* **Step 13** - String manipulation
 
-![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/53bd55c4-6667-4d5c-a070-8e0802265c24)
+  * 13.1 - Removed the [ ] and '' (quotation marks) from genres and production_countries columns
+  * 13.2 - Replaced the null values with default values
+  * 13.3 - Set the Null values in character column to 'No information'
+  * 13.4 - Set the null values in seasons to 0 which corresponds to movies
+  * 13.5 - Set the null values in age_certification to 'Others'
+  * 13.6 - Set the values with [] in genres column with 'N/A'
+  * 13.7 - Set the values with [] in production_countries column with 'N/A'
 
-  After removing the [ ] and '', the rows look like this now -
+* **Step 14** - Modified some titles
 
-![Screenshot (913)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/49200717-b38a-4ef6-95d4-8a576ec67b74)
+  * 14.1 - Renamed title '30 March' to '30.March'
+  * 14.2 - Replaced '#' from the beginning of some titles
 
-  * **14.2 - Replacing the null values with default values** 
-  * **14.3 - Setting the Null values in character column to 'No information'**
-  * **14.4 - Setting the null values in seasons to 0 which corresponds to movies**
-  * **14.5 - Setting the null values in age_certification to 'Others'**    
-  * **14.6 - Setting the values with [] in genres column with 'N/A'**
-  * **14.7 - Setting the values with [] in production_countries column with 'N/A'**
+* **Step 15** - Removed the extra columns production_contries and genres since I now have cleaned columns country and genre.
 
-* ### **Step 15 - Modifying the titles**
+* **Step 16** - Concatenating multiple characters into a single row
 
-  * **15.1 - Renaming title '30 March' to '30.March'** 
-  * **15.2 - Replacing '#' from the beginning of some titles**
-
-* ### **Step 16 - Removing the extra columns**
-
-* ### **Step 17 - Concatenating multiple characters into a single row**
-
-  In a film or show, there are multiple roles that are played by more than one person. Occasionally, multiple characters might be played by one person. The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named `credits` was created with similar fields as the `raw_credits` table. The only difference between these two tables is that `raw_credits` sometimes holds information about characters played by a certain actor in a certain show in more than one row, while in the `credits` table, there is only one (unique) combination of `show_id`, `person_id`, `character played`, and `role` (i.e., either director or actor). This reduces the number of duplicate rows in the table.
+The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. 
 
 ![Screenshot (908)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/4f18d8a6-283a-484f-b40e-dcc854855754)
+
+To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named _credits_ was created with similar fields as the _raw_credits_ table. The only difference between these two tables is that _raw_credits_ sometimes holds information about characters played by a certain actor in a certain show more than once, while in the _credits_ table, there is only one (unique) combination of _show_id_, _person_id_, _character played_, and _role_ (i.e., either director or actor). This reduces the number of duplicates in the table.
     
     DROP TABLE IF EXISTS credits;
     CREATE TABLE credits (person_id INTEGER, id VARCHAR(20), name TEXT, role VARCHAR(8), character TEXT);
@@ -211,22 +184,30 @@ So I decided to remove these rows with null values.
 
 ![Screenshot (909)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6c7c7fbe-ee1b-4751-ab6a-1a0822ae068a)
 
-* ### **Step 18 - Renaming the 'raw_titles' table to 'titles'**
+* **Step 17** - Renamed the 'raw_titles' table to 'titles'
 
-* ### **Step 19 - Saving the new tables and import them as cleaned csv files**
+* **Step 18** - Saving the new tables and import them as cleaned csv files
 
 # Database Design:
 
-By the end of data cleaning process we end up with two clean tables, *titles* containing all information on shows/movies and *credits* containing the information of actors and directors associated with each show. In both tables, the one important attribute that uniquely identifies a show is its **id**. Each table has this column that helps us join the two tables together. 
+After cleaning the Netflix data in Part 1, we obtained two tables - 'titles' containing information about unique shows/movies and 'credits' containing information about the castings in different shows/movies.
+The data is now distributed in these two tables.
 
 ![initial data dist](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/5e10a804-e422-477f-8414-d5e4ceef96c0)
 
-But the titles table contain 5249 unique entries of shows, while credits show contain information for 5434 shows. Clearly, these extra rows in credits table have no equivalent data in shows table. So,we'll remove these redundant rows that would not help us in the analysis.
+When we counted the unique shows in each of the tables (since both have id column which corresponds to unique shows), we found out that the number of unique shows in credits table is higher than the titles table.
 
 ![Show](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/764b48d0-8276-4724-926b-fda2334e00d9)
 
-Using Inner Join we selected the data that are present in both tables and saved them as the third table *netflix_table*. Now that we have one table that has all the non-null entries, we are ready to normalize it. 
+To have a consistency in the entire analysis, I've chosen only the data that are present in both tables by creating a view with the common data from both titles and credits table.
 
+Using the best practices of database management system, we can now easily split the data into different tables that will allow us -
+* Less data duplication and more efficient storage usage.
+* Increased data integrity, accuracy and consistency.
+* Improved query performance and organization.
+* Increased security and connection.
+
+## Database Design: 
 
 Database design is the organization of data according to a database model. The designer determines what data must be stored and how the data elements interrelate.
 
@@ -234,39 +215,105 @@ Like any design process, database and information system design begins at a high
 
 * ## Conceptual data model:
 
-They are also referred to as domain models and offer a big-picture view of what the system will contain, how it will be organized, and which business rules are involved. Conceptual models are usually created as part of the process of gathering initial project requirements. Typically, they include entity classes (defining the types of things that are important for the business to represent in the data model), their characteristics and constraints, the relationships between them and relevant security and data integrity requirements.
+They are also referred to as domain models and offer a big-picture view of what the system will contain, how it will be organized, and which business rules are involved. Conceptual models are usually created as part of the process of gathering initial project requirements.
 
 ![conceptual model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/229bc1b8-7799-426b-866e-20d9a0fb9184)
 
 * ## Logical data model:
 
-They are less abstract and provide greater detail about the concepts and relationships in the domain under consideration. One of several formal data modeling notation systems is followed. These indicate data attributes, such as data types and their corresponding lengths, and show the relationships among entities. Logical data models don’t specify any technical system requirements. This stage is frequently omitted in agile or DevOps practices. Logical data models can be useful in highly procedural implementation environments, or for projects that are data-oriented by nature, such as data warehouse design or reporting system development.
+They are less abstract and provide greater detail about the concepts and relationships in the domain under consideration. These indicate data attributes, such as data types and their corresponding lengths, and show the relationships among entities. Logical data models don’t specify any technical system requirements.
 
 ![logical model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/371cd6c6-d3ef-4fae-8be1-dd3e979cd4ca)
 
 * ## Physical data model:
 
-They provide a schema for how the data will be physically stored within a database. As such, they’re the least abstract of all. They offer a finalized design that can be implemented as a relational database, including associative tables that illustrate the relationships among entities as well as the primary keys and foreign keys that will be used to maintain those relationships. Physical data models can include database management system (DBMS)-specific properties, including performance tuning.
+They provide a schema for how the data will be physically stored within a database. As such, they’re the least abstract of all. They offer a finalized design that can be implemented as a relational database, including associative tables that illustrate the relationships among entities as well as the primary keys and foreign keys that will be used to maintain those relationships. 
 
 ![physical model](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/1c972f98-6226-4768-9656-537d884cb181)
 
-This database is normalized upto 3rd Normal Form. It ensures that -
+The following steps were taken to create the database -
+
+* **Step 1** - To give the data First Normal Form (1NF), I unnested the nested columns first by 'genres' column and then by 'production_countries' and saved the data in a view called country_nested. As for primary key, the id column is a unique identifier of the show/movie and can act as a primary key.
+
+* **Step 2** - Then I created a table 'netflix_table' with all the data from country_nested view to further manipulate it easily. Due to unnesting of the data, the number of data has increased to 271234.
+
+* **Step 3** - To keep the database uncluttered I removed the redundant views from the database.
+
+* **Step 4** - Then to give the data in netflix_table Second Normal Form (2NF), I needed to make sure that each non-key attribute is functionally dependent on the primary key(show_id) only. The attributes that are functionally independent from the primary key, will have their separate tables with a primary key. So I grouped different categories into different tables according to the physical model of the database.
+
+* **Step 5** - I created the leaf tables and inserted the values in respective tables from netflix_tables and provided the primary keys to each of the tables.
+
+* **Step 6** - To link theses relations(tables) with each other I defined foreign keys.
+
+* **Step 7** - There were four attributes genre, country, actor and director that had many-to-many relationship with the show table. So to join these tables with show table individually I needed 4 junction/linking tables with the foreign keys as columns.
+
+* **Step 8** - To test that the keys work fine and link the tables properly, I've performed several queries with JOIN statements at each step.
+
+* **Step 9** - In the country table to make the data more comprehensible, I decided to add country name along with country ISO code. So I joined a table that have been previously downloaded from Wikipedia and inserted the country names into the country_name column in country table.
+
+* **Step 10**- Finally, I checked for transitive dependencies among the leaf tables and their attributes. There were none. This satisfied the Third Normal Form (3NF).
+
+* **Step 11** - To make the data clean, consistent and complete, I performed some string Manipulations, trimmed some parts of strings, used REGEX to filter out inconsistencies and changed them.
+
+
+This database is now normalized upto 3rd Normal Form. It ensures that -
 
 1. Each table have columns that only store a single piece of data and that data is accessed through a unique key (Primary Key). [First Normal Form]
+
 2. Each Non-key attributes (i.e., columns other than primary key(s) are functionally dependent on the primary key only. [Second Normal Form]
-3. There is no transitional dependency of the non-key attributes i.e., each table has columns that are dependent only on the key. [Third Normal Form]
+
+3. There is no transitional dependency of the non-key attributes i.e., each table has columns that are dependent only on the primary key. [Third Normal Form]
 
 # Data Analysis:
+
+### 1. What is the total number of movies and TV shows available on Netflix?
+
+There are total 4939 contents in the dataset.
+
+### 2. What is the total number of contents per type (movie/show)?
+
+### 3. How has the distribution of content (movies and TV shows) changed over time?
+
+### 4. Which were the top years in terms of the number of titles released?
+
+### 5. How many movies and TV shows were released in each decade?
+
+### 6. What are the most common genres of movies and TV shows on Netflix?
+
+### 7. Which country produces the most movies and TV shows on Netflix?
+
+### 8. Calculate descriptive statistics for imdb score, imdb votes and runtime of the shows.
+
+### 9. Which shows/movies are of longest and shortest duration?
+
+### 10. Calculate the distribution of seasons for shows.
+
+### 11. What are the 5 top-rated movies and shows on Netflix?
+
+### 12. What are the most popular certifications on Netflix?
+
+### 13. List Top 10 Actors with number of shows/movies acted.
+
+### 14. List Top 10 Directors with number of shows/movies directed.
+
+### 15. Categorize the contents in 3 parts (Short, Medium and Long) in terms of duration and give their respective percentage frequency.
+
+### 16. Categorize the contents in 10 ratings based on the imdb_score.
+
+    
 # Data Visualization:
-# Results:
+
+
+
+# Summary:
 
 ## Resources:
 
-1. Dataset
+1. Dataset Used
    
    * [Netflix Movies and Series in Kaggle](https://www.kaggle.com/datasets/thedevastator/the-ultimate-netflix-tv-shows-and-movies-dataset?rvi=1)
    * [Netflix Movies and Series in data.world](https://data.world/gonzandrobles/netflix-movies-and-series)
-   * [iso.csv](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/files/13530946/iso.csv)
+   * [country_iso_codes.csv](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/files/13530946/iso.csv)
    * [Netflix Wikipedia](https://en.wikipedia.org/wiki/Netflix#)
 
 2. Data Cleaning in SQL
@@ -293,3 +340,11 @@ This database is normalized upto 3rd Normal Form. It ensures that -
    * [Regular Expressions in PostgreSQL](https://youtu.be/bRly46jfdMk?si=2kjYUxmUJJgYPmLB)
 
 6. Data Analysis 
+   * [SQL Indexes - Definition, Examples, and Tips](https://youtu.be/NZgfYbAmge8?si=NEVDDxeAfTzUgpc5)
+   * [PostgreSQL Indexing : How, why, and when.](https://youtu.be/clrtT_4WBAw?si=nH2F2JyTCbiQAAQq)
+   * [PostgreSQL CASE](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-case/)
+   * [Rating System](https://rating-system.fandom.com/wiki/TV-G)
+   * [How to rate movies on IMDB](https://www.imdb.com/list/ls076459507/)
+
+7. Dashboard
+   * [Create Netflix dashboard with Tableau in 30 minutes](https://youtu.be/BTArwS4ljC4?si=u-i97yBBDc9yHqko)
