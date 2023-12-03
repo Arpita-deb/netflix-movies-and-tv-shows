@@ -272,68 +272,100 @@ There are total 4939 contents in the dataset.
 
 ### 2. What is the total number of contents per type (movie/show)?
 
+![show-movie-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e39fcc54-7cf8-4d71-9a43-ef2ee89ec26f)
+
+![distribution-of-movies-and-shows-on-netflix](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/637ef63d-25cc-4a97-ad66-5133e2a1320d)
+
 ### 3. How has the distribution of content (movies and TV shows) changed over time?
+
+![distribution-of-contents-on-netflix-over-the-years](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0fce3200-17d6-4e4a-a349-a66f8b915a52)
 
 ### 4. Which were the top years in terms of the number of titles released?
 
+![top-years](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/1c50ab08-e4f5-447b-a599-6c63b5eb09c5)
+
 ### 5. How many movies and TV shows were released in each decade?
+
+![decade](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/5be6c53b-601a-4792-ab2c-3320e06793d0)
+
+![rise-of-netflix-over-the-decades](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/3c26d9ea-8ed7-465d-b558-197032b31d9e)
 
 ### 6. What are the most common genres of movies and TV shows on Netflix?
 
+![top-5-genre-movies](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/785fc9f9-7281-4e23-9959-f5446e2a8e4f)
+
+![top-5-genre-shows](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/26fc8a19-fca0-4e65-b7ef-bd7675217461)
+
+![popular-genre-on-netflix](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/8f1a54cb-7bc5-4230-b1f3-7790a220b1c9)
+
 ### 7. Which country produces the most movies and TV shows on Netflix?
+
+![top-10-country-movie](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/f12b891c-7ec7-4a7e-9858-3a1a99fbb280)
+
+![top-10-country-show](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/5251e76e-0933-4027-8839-89b1c97b01d7)
+
+![total-movie-released-per-country](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/410194f3-06c7-431f-9e80-1f67deb2c200)
+
+![total-shows-released-per-country](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/908ef763-7358-40e9-979d-1543b2107664)
+
+![distribution-of-contents-in-top-10-countries](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/3164f2e7-b5bb-412e-8f17-d4a283bbb65d)
 
 ### 8. Calculate descriptive statistics for imdb score, imdb votes and runtime of the shows.
 
+![imdb_score-dist](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/2497b621-1f4e-4f35-b712-74c7e5116cf4)
+
+![imdb_votes-dist](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0e6b85a6-9237-41c7-b779-76a1ea6ce684)
+
+![runtime-dist](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6a298cee-5150-4b87-9f0e-551a679eaa7f)
+
 ### 9. Which shows/movies are of longest and shortest duration?
+
+![highest-runtime](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/7a78fdb4-abed-4d40-a062-385816a0a081)
+
+![lowest-runtime](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/685d5086-379b-4d9a-9906-d10459d10543)
 
 ### 10. Calculate the distribution of seasons for shows.
 
-### 11. What are the 5 top-rated movies and shows on Netflix?
+![seasons](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e7538a4e-073f-4033-8997-e8b5afd1dcd6)
+
+![popular-seasons-on-netflix](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/655cb459-2fbf-4b52-8a6e-709294619dbf)
+
+### 11. What are the 10 top-rated movies and shows on Netflix?
+
 
 ### 12. What are the most popular certifications on Netflix?
 
+![age-cert](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c79bc763-b7a0-4f59-8a55-cb9bdb280ee9)
+
+![distribution-of-contents-on-netflix-by-age-certification](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/348a84b3-7d9b-49fd-a10b-cf45e589523f)
+
 ### 13. List Top 10 Actors with number of shows/movies acted.
+
+
 
 ### 14. List Top 10 Directors with number of shows/movies directed.
 
+
 ### 15. Categorize the contents in 3 parts (Short, Medium and Long) in terms of duration and give their respective percentage frequency.
 
-### 16. Categorize the contents in 10 ratings based on the imdb_score.
-![age-cert](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c79bc763-b7a0-4f59-8a55-cb9bdb280ee9)
-![decade](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/5be6c53b-601a-4792-ab2c-3320e06793d0)
 ![duration-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/66f5cb5c-87b6-4deb-be30-b6fc995fc835)
-![genre-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/72ebc726-70ed-4bdd-8750-70228bfc99ab)
-![highest-runtime](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/7a78fdb4-abed-4d40-a062-385816a0a081)
-![imdb_score-dist](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/2497b621-1f4e-4f35-b712-74c7e5116cf4)
-![imdb_votes-dist](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0e6b85a6-9237-41c7-b779-76a1ea6ce684)
-![lowest-runtime](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/685d5086-379b-4d9a-9906-d10459d10543)
-![rating-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/446ef250-dea1-448a-bde3-1119f839bb47)
-![runtime-dist](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6a298cee-5150-4b87-9f0e-551a679eaa7f)
-![seasons](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e7538a4e-073f-4033-8997-e8b5afd1dcd6)
-![show-movie-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e39fcc54-7cf8-4d71-9a43-ef2ee89ec26f)
-![top-5-genre-movies](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/785fc9f9-7281-4e23-9959-f5446e2a8e4f)
-![top-5-genre-shows](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/26fc8a19-fca0-4e65-b7ef-bd7675217461)
-![top-10-actors](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/df3a65bc-d5a1-4de5-a0e3-2914d1aeccdc)
-![top-10-country-movie](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/f12b891c-7ec7-4a7e-9858-3a1a99fbb280)
-![top-10-country-show](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/5251e76e-0933-4027-8839-89b1c97b01d7)
-![top-10-directors](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/62300a48-3985-4e5b-81a1-1f7bc7658356)
-![top-10-movies](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/ee093db2-c729-4937-98a1-fa59305a33ca)
-![top-10-show](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/b3f924b7-110a-4616-a7b3-ed60ebd21528)
-![top-years](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/1c50ab08-e4f5-447b-a599-6c63b5eb09c5)
-    
-# Data Visualization:
 
-![distribution-of-contents-in-top-10-countries](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/3164f2e7-b5bb-412e-8f17-d4a283bbb65d)
 ![distribution-of-contents-on-netflix-based-on-runtime](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/e0b28e23-8ef6-47f3-a1b6-c5511d10716a)
-![distribution-of-contents-on-netflix-by-age-certification](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/348a84b3-7d9b-49fd-a10b-cf45e589523f)
-![distribution-of-contents-on-netflix-over-the-years](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/0fce3200-17d6-4e4a-a349-a66f8b915a52)
-![distribution-of-movies-and-shows-on-netflix](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/637ef63d-25cc-4a97-ad66-5133e2a1320d)
-![popular-genre-on-netflix](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/8f1a54cb-7bc5-4230-b1f3-7790a220b1c9)
-![popular-seasons-on-netflix](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/655cb459-2fbf-4b52-8a6e-709294619dbf)
-![rise-of-netflix-over-the-decades](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/3c26d9ea-8ed7-465d-b558-197032b31d9e)
-![total-movie-released-per-country](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/410194f3-06c7-431f-9e80-1f67deb2c200)
-![total-shows-released-per-country](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/908ef763-7358-40e9-979d-1543b2107664)
+
+
+### 16. Categorize the contents in 10 ratings based on the imdb_score.
+
+![rating-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/446ef250-dea1-448a-bde3-1119f839bb47)
+
 ![what-do-people-think-of-the-contents-on-netflix-](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c23452ab-eda9-4dd3-913b-084c5363b897)
+
+### 17. What is the percentage frequency of genre?
+![genre-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/72ebc726-70ed-4bdd-8750-70228bfc99ab)
+
+### 18. Calculate the number of shows with runtime greater than the average duration?
+
+### 19. Calculate the number of contents with imdb_score greater than average imdb_score.
+
 
 # Summary:
 
