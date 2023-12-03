@@ -138,7 +138,7 @@ The imdb_score and imdb_votes have 539 null values altogether. I can do any of t
   4. Another approach is to use a string value such as 'No information' or 'N/A' to represent missing data. However, this approach requires converting the column to a string datatype first, which may not be ideal if I need to perform calculations on the column.
   5. Or, removing the rows altogether. Removing these rows with null values will leave us with 5806 - 1- 24 - 532 = 5249 rows which will not affect the analysis much.
 
-So I decided to remove these rows with null values.
+  So I decided to remove these rows with null values.
 
 * Step 10 - Checked for duplicate values. There were no duplicate values in both table. But there are entries with same id and person_id but with different character or role like the data shown below. There are multiple entries of one person acting in one particular show/movie but the data is recorded in 2 or more rows for different characters/roles. 
 
@@ -169,11 +169,11 @@ This increases the number of records in our table. The character column needed t
 
 * **Step 16** - Concatenating multiple characters into a single row
 
-The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. 
+  The `raw_titles` table holds the data of unique shows, while the `raw_credits` table holds the data of people who have played a certain character in a particular show. Actors and shows have a many-to-many relationship, meaning that one film/show might have more than one actor, and one actor may play more than one character both in one show or in multiple shows. 
 
-![Screenshot (908)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/4f18d8a6-283a-484f-b40e-dcc854855754)
+  ![Screenshot (908)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/4f18d8a6-283a-484f-b40e-dcc854855754)
 
-To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named _credits_ was created with similar fields as the _raw_credits_ table. The only difference between these two tables is that _raw_credits_ sometimes holds information about characters played by a certain actor in a certain show more than once, while in the _credits_ table, there is only one (unique) combination of _show_id_, _person_id_, _character played_, and _role_ (i.e., either director or actor). This reduces the number of duplicates in the table.
+  To make it easier for users to look up any actor associated with a particular show and also get the information on the character they played, a table named _credits_ was created with similar fields as the _raw_credits_ table. The only difference between these two tables is that _raw_credits_ sometimes holds information about characters played by a certain actor in a certain show more than once, while in the _credits_ table, there is only one (unique) combination of _show_id_, _person_id_, _character played_, and _role_ (i.e., either director or actor). This reduces the number of duplicates in the table.
     
     DROP TABLE IF EXISTS credits;
     CREATE TABLE credits (person_id INTEGER, id VARCHAR(20), name TEXT, role VARCHAR(8), character TEXT);
@@ -182,7 +182,7 @@ To make it easier for users to look up any actor associated with a particular sh
 
   This query groups the rows in the raw_credits table by person_id,id,name and role and concatenate the values in the character column for each group using the string_agg function. The resulting table will have 5 columns: person_id,id, name, character, role where character contains the concatenated values of the character column for each group. This table now has 77122 entries. 
 
-![Screenshot (909)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6c7c7fbe-ee1b-4751-ab6a-1a0822ae068a)
+  ![Screenshot (909)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/6c7c7fbe-ee1b-4751-ab6a-1a0822ae068a)
 
 * **Step 17** - Renamed the 'raw_titles' table to 'titles'
 
@@ -190,22 +190,22 @@ To make it easier for users to look up any actor associated with a particular sh
 
 # Database Design:
 
-After cleaning the Netflix data in Part 1, we obtained two tables - 'titles' containing information about unique shows/movies and 'credits' containing information about the castings in different shows/movies.
+  After cleaning the Netflix data in Part 1, we obtained two tables - 'titles' containing information about unique shows/movies and 'credits' containing information about the castings in different shows/movies.
 The data is now distributed in these two tables.
 
 ![initial data dist](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/5e10a804-e422-477f-8414-d5e4ceef96c0)
 
-When we counted the unique shows in each of the tables (since both have id column which corresponds to unique shows), we found out that the number of unique shows in credits table is higher than the titles table.
+  When we counted the unique shows in each of the tables (since both have id column which corresponds to unique shows), we found out that the number of unique shows in credits table is higher than the titles table.
 
 ![Show](https://github.com/Arpita-deb/Books-Database-Normalization/assets/139372731/764b48d0-8276-4724-926b-fda2334e00d9)
 
-To have a consistency in the entire analysis, I've chosen only the data that are present in both tables by creating a view with the common data from both titles and credits table.
+  To have a consistency in the entire analysis, I've chosen only the data that are present in both tables by creating a view with the common data from both titles and credits table.
 
-Using the best practices of database management system, we can now easily split the data into different tables that will allow us -
-* Less data duplication and more efficient storage usage.
-* Increased data integrity, accuracy and consistency.
-* Improved query performance and organization.
-* Increased security and connection.
+  Using the best practices of database management system, we can now easily split the data into different tables that will allow us -
+    * Less data duplication and more efficient storage usage.
+    * Increased data integrity, accuracy and consistency.
+    * Improved query performance and organization.
+    * Increased security and connection.
 
 ## Database Design: 
 
@@ -268,7 +268,7 @@ This database is now normalized upto 3rd Normal Form. It ensures that -
 
 ### 1. What is the total number of movies and TV shows available on Netflix?
 
-There are total 4939 contents in the dataset.
+![total_content](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/f7cd5754-71f3-439f-a1df-7d74310c1224)
 
 ### 2. What is the total number of contents per type (movie/show)?
 
@@ -332,6 +332,13 @@ There are total 4939 contents in the dataset.
 
 ### 11. What are the 10 top-rated movies and shows on Netflix?
 
+![top-10-movies](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/37bb537c-0d40-42f2-90fd-b6b9fe14d4f1)
+
+![top-10-show](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/7cd4579d-5fbf-43dd-a018-deb3f660333d)
+
+![top-10-movies-in-netflix-based-on-imdb-scores](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/3e711235-38de-4ac7-bb38-114dc8fad092)
+
+![top-10-shows-in-netflix-based-on-imdb-scores](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/eec8587b-e2cb-4088-995d-1d772bfd279e)
 
 ### 12. What are the most popular certifications on Netflix?
 
@@ -341,10 +348,11 @@ There are total 4939 contents in the dataset.
 
 ### 13. List Top 10 Actors with number of shows/movies acted.
 
-
+![top-10-actors](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/3c398d61-c296-4fa9-8a77-cc87a1b31f30)
 
 ### 14. List Top 10 Directors with number of shows/movies directed.
 
+![top-10-directors](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/aed865e9-2aa4-478b-87c4-4faa7f133ec4)
 
 ### 15. Categorize the contents in 3 parts (Short, Medium and Long) in terms of duration and give their respective percentage frequency.
 
@@ -360,11 +368,16 @@ There are total 4939 contents in the dataset.
 ![what-do-people-think-of-the-contents-on-netflix-](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/c23452ab-eda9-4dd3-913b-084c5363b897)
 
 ### 17. What is the percentage frequency of genre?
+
 ![genre-freq](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/72ebc726-70ed-4bdd-8750-70228bfc99ab)
 
 ### 18. Calculate the number of shows with runtime greater than the average duration?
 
+![num_content_greater_than_avg_runtime](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/b5f84408-32db-4032-bf56-75ed3f67d888)
+
 ### 19. Calculate the number of contents with imdb_score greater than average imdb_score.
+
+![num_content_greater_than_avg_imdb](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/f872323d-fcf0-4bb0-8d63-890e3235baf9)
 
 
 # Summary:
