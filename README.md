@@ -379,6 +379,9 @@ This database is now normalized upto 3rd Normal Form. It ensures that -
 
 ![num_content_greater_than_avg_imdb](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/f872323d-fcf0-4bb0-8d63-890e3235baf9)
 
+# Dashboard:
+
+![Screenshot (1080)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/d48f1da4-5a37-4cf3-9aa9-d0a6cbde957f)
 
 # Summary:
 
