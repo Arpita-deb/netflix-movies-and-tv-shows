@@ -1,4 +1,4 @@
-# WHAT TO WATCH ON NETFLIX NEXT? 
+# Netflix Data Analysis: A Deep Dive into Streaming Trends 
 ## Data Analysis of the largest video streaming service
 
 ![Netflix logo](https://logos-world.net/wp-content/uploads/2020/04/Netflix-Logo-2014-present.jpg)
@@ -381,6 +381,25 @@ This database is now normalized upto 3rd Normal Form. It ensures that -
 
 
 # Summary:
+
+* The analysis revealed that Netflix has more movies than shows, mostly from the USA and India, and that its popularity has increased dramatically since 2010. Japan and North Korea are seen as emerging show producing countries.
+* Over the past ten years (2011–2021), Netflix’s popularity surged as the number of contents released increased almost tenfold and the trend seem to continue to the next decade.
+* It also shows that the most common genres are drama, comedy and action, and that the average runtime, IMDB score and IMDB votes are 81.61 minutes, 6.5269 and 24724.6467 respectively.
+* It also indicates that most of the contents are for mature audiences as 14% of the total contents have TV-MA certification followed by R (11%) and PG-13 (8%).
+* Most of the shows have one season.
+
+# Limitation of the project:
+
+* One possible limitation of the Netflix dataset is that it only contains data up to May 2022, which may not reflect most current contents and trends.
+* Due to rigorous data cleaning of the dataset, many incorrect and inconsistent entries have been removed from the dataset. So, it does not cover the entire contents of Netflix.
+* Since there were no reviews, we couldn’t perform sentiment analysis to provide more insights into user behavior and preferences.
+
+# Some future project ideas:
+
+* Analyze the relationship between the director and the cast of the movies and shows.
+* Explore the variation of content in other countries as well as for different years.
+* Perform sentiment analysis on the descriptions of the movies and shows.
+* Create a recommendation system based on the user’s preferences and viewing history.
 
 ## Resources:
 
