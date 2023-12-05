@@ -1,5 +1,4 @@
 # Netflix Data Analysis: A Deep Dive into Streaming Trends 
-## Data Analysis of the largest video streaming service
 
 ![Netflix logo](https://logos-world.net/wp-content/uploads/2020/04/Netflix-Logo-2014-present.jpg)
 
