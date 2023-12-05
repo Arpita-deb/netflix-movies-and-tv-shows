@@ -4,9 +4,9 @@
 
 # Introduction:
 
-Netflix is an American subscription video on-demand over-the-top streaming service which  was launched on January 16, 2007,. The service primarily distributes original and acquired films and television shows from various genres, and it is available internationally in multiple languages.[6]
+Netflix is an American subscription video on-demand over-the-top streaming service which  was launched on January 16, 2007. The service primarily distributes original and acquired films and television shows from various genres, and it is available internationally in multiple languages.
 
-Netflix is the most-subscribed video on demand streaming media service, with 238.39 million paid memberships in more than 190 countries. By 2022, "Netflix Original" productions accounted for half of its library in the United States and the namesake company had ventured into other categories, such as video game publishing of mobile games via its flagship service. As of October 2023, Netflix is the 24th most-visited website in the world with 23.66% of its traffic coming from the United States, followed by the United Kingdom at 5.84% and Brazil at 5.64%.
+Netflix is the most-subscribed video on demand streaming media service, with 238.39 million paid memberships in more than 190 countries. As of October 2023, Netflix is the 24th most-visited website in the world with 23.66% of its traffic coming from the United States, followed by the United Kingdom at 5.84% and Brazil at 5.64%.
 
 ![Screenshot (1047)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/86b4a945-6b90-4570-b988-a61db918e182)
 
@@ -21,17 +21,17 @@ The goal of this project is to find the answers to these following questions -
 5. What is the average duration of movies and TV shows on Netflix?
 6. What are the top-rated movies on Netflix?
 7. What are the most popular ratings on Netflix?
-8. What are the most and least popular genres on Netflix?
-9. Which were the top years in terms of the number of titles released?
-10. Which actor/director has most films/series in Netflix?
-11. What are the percentage relative frequency for age_certification, genre and country?
+8. Which were the top years in terms of the number of titles released?
+9. Which actor/director has most films/series in Netflix?
+10. What are the percentage relative frequency for genre?
 
 # Tools used:
 
 1. Google Slides - to create the project proposal
 2. PostgreSQL (SQL Shell) - for data cleaning, data normalization and analysis process
 3. Datawrapper - to create data visualizations
-4. GitHub - for documentation 
+4. Tableau - to create dashboard
+5. GitHub - for documentation 
 
 # Methodologies used:
 
@@ -45,7 +45,7 @@ The goal of this project is to find the answers to these following questions -
 # Deliverables:
 
 1. A Project Proposal
-2. A cleaned dataset
+2. cleaned dataset
 3. Normalized data in PostgreSQL database
 4. A full documentation of data cleaning and analysis process
 5. Data visualizations and dashboard in Tableau
@@ -381,6 +381,8 @@ This database is now normalized upto 3rd Normal Form. It ensures that -
 # Dashboard:
 
 ![Screenshot (1080)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/d48f1da4-5a37-4cf3-9aa9-d0a6cbde957f)
+
+The tableau dashboard can be accessed [here](https://public.tableau.com/app/profile/arpita.deb5031/viz/netflixdataanalysis_17012304017640/Dashboard2).
 
 # Summary:
 
