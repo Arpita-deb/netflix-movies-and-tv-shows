@@ -8,7 +8,7 @@ Netflix is an American subscription video on-demand over-the-top streaming servi
 
 Netflix is the most-subscribed video on demand streaming media service, with 238.39 million paid memberships in more than 190 countries. As of October 2023, Netflix is the 24th most-visited website in the world with 23.66% of its traffic coming from the United States, followed by the United Kingdom at 5.84% and Brazil at 5.64%.
 
-Using Postgresql I analyzed and normalized the Netflix Streaming data, which contains information about the titles, genres, ratings, and countries of the streaming content. I then used Datawrapper and Tableau to create interactive and engaging visualizations of the streaming trends, such as the most popular genres, the distribution of ratings, and the growth of content over time. 
+Using Postgresql I cleaned, analyzed and normalized the Netflix Streaming data, which contains information about the titles, genres, ratings, and countries of the streaming content. I then used Datawrapper and Tableau to create interactive and engaging visualizations of the streaming trends, such as the most popular genres, the distribution of ratings, and the growth of content over time. 
 
 ![Screenshot (1047)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/86b4a945-6b90-4570-b988-a61db918e182)
 
