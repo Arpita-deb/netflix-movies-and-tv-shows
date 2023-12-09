@@ -1,9 +1,15 @@
--- connect first to netflix database
--- \c netflix
+--Part 2 - Data Normalization
+
+-- connecting first to netflix database
+\c netflix
+
+-- by running the code the entire sql script will be executed
 -- \i C:/Users/Dell/Desktop/Netflix/NETFLIX_DATA_NORMALIZATION.sql
+
 SET client_encoding TO UTF8;
 
--- creating a view with common data from titles and credits table
+
+-- Step 1 - creating a view with common data from titles and credits table
 
 DROP VIEW netflix CASCADE;
 
@@ -16,7 +22,7 @@ ON c.id = t.id;
 SELECT * FROM netflix LIMIT 10;
 
 
--- creating a view where the genre column is unnested
+-- Step 2 - creating a view where the genre column is unnested
 
 DROP VIEW genre_unnested CASCADE;
 
@@ -25,7 +31,7 @@ CREATE VIEW genre_unnested AS
 FROM netflix);
 
 
--- creating a view where the country column is unnested
+-- Step 3 -  creating a view where the country column is unnested
 
 DROP VIEW country_unnested CASCADE;
 
@@ -36,18 +42,13 @@ FROM genre_unnested);
 
 SELECT * FROM country_unnested LIMIT 15;
 
--- changing the view into a table to add the foreign keys
+
+
+-- Step 4 - changing the view into a table to add the foreign keys
 
 DROP TABLE netflix_table CASCADE;
 
 CREATE TABLE netflix_table AS SELECT * FROM country_unnested;
-
-
--- saving the view as a csv file on desktop
-
--- \COPY (SELECT * FROM netflix_table) TO 'C:/Users/Dell/Desktop/Netflix/netflix_joined_data.csv' DELIMITER ',' CSV HEADER;
-
--- \COPY (SELECT * FROM country) TO 'C:/Users/Dell/Desktop/Netflix/country.csv' DELIMITER ',' CSV HEADER;
 
 -- adding two columns to hold the foreign keys genre_id and country_id
 
@@ -55,7 +56,11 @@ ALTER TABLE netflix_table ADD COLUMN genre_id integer;
 
 ALTER TABLE netflix_table ADD COLUMN country_id integer;
 
+-- saving the view as a csv file on desktop
 
+-- \COPY (SELECT * FROM netflix_table) TO 'C:/Users/Dell/Desktop/Netflix/netflix_joined_data.csv' DELIMITER ',' CSV HEADER;
+
+-- \COPY (SELECT * FROM country) TO 'C:/Users/Dell/Desktop/Netflix/country.csv' DELIMITER ',' CSV HEADER;
 
 -- To be updated once data is inserted in the leaf tables
 
@@ -65,14 +70,15 @@ ALTER TABLE netflix_table ADD COLUMN country_id integer;
 
 
 
--- dropping the unnecessary views
+-- Step 5 - dropping the unnecessary views
 
 DROP VIEW netflix CASCADE;
 DROP VIEW genre_unnested CASCADE;
 DROP VIEW country_unnested CASCADE;
 
 
--- Creating the leaf tables
+
+-- Step 6 - Creating the leaf tables
 
 DROP TABLE IF EXISTS show CASCADE;
 DROP TABLE IF EXISTS director CASCADE;
@@ -131,7 +137,8 @@ certification_id INTEGER REFERENCES age_certification(id) ON DELETE CASCADE
 );
 
 
--- inserting values into the tables
+
+-- Step 7 - inserting values into the tables
 
 INSERT INTO type(type) 
 SELECT DISTINCT type 
@@ -192,13 +199,15 @@ UPDATE show SET certification_id = (SELECT age_certification.id FROM age_certifi
 SELECT * FROM show LIMIT 10;
 
 
--- deleting the redundant columns from show
+
+-- Step 8 - deleting the redundant columns from show
 
 ALTER TABLE show DROP COLUMN type;
 ALTER TABLE show DROP COLUMN age_certification;
 
 
--- Updating the country_id and genre_id in netflix table 
+
+-- Step 9 - Updating the country_id and genre_id in netflix table 
 
 UPDATE netflix_table 
 SET country_id =(SELECT country.id 
@@ -211,7 +220,9 @@ SET genre_id =(SELECT genre.id
                WHERE netflix_table.genre = genre.genre) ;
 
 
--- linking tables - To create many-to-many relation between shows, genre, country, actor and director tables
+
+
+-- Step 10 - creating linking tables to create many-to-many relation between shows, genre, country, actor and director tables
 
 
 -- Creating show_genre table and inserting values into it from netflix_table
@@ -296,7 +307,7 @@ LIMIT 20;
 
 
 
--- ISO table -joining iso table to fill the country_name column in country table
+--  Step 11 - creating ISO table to fill the country_name column in country table
 
 -- Creating iso table and inserting values into it from iso csv file
 
@@ -317,7 +328,7 @@ UPDATE country SET country_name = (SELECT English_short_name FROM iso WHERE iso.
 
 
 
--- Fine Adjustments
+-- Step 12 - Fine Adjustments
 
 UPDATE country SET country_name = LTRIM(country_name , '┬á');
 
