@@ -1,11 +1,11 @@
 -- Data Analysis
 
+-- entering the database 
 \c netflix
 -- shows all the relations in the database
 \dt 
 -- shows all the relations in the database with their sizes 
 \dt+
-
 
 
 -- 1. What is the total number of movies and TV shows available on Netflix?
@@ -83,7 +83,10 @@ FROM decade
 GROUP BY decade
 ORDER BY decade ASC;
 
--- This query will group the shows by decade and count the number of shows released in each decade. The floor((year - 1950) / 10) * 10 expression calculates the decade for each year by subtracting 1950 from the year, dividing by 10, rounding down to the nearest integer, and multiplying by 10. The WHERE clause filters the data to include only the years between 1953 and 2022. The GROUP BY clause groups the data by decade, and the ORDER BY clause sorts the results by decade in ascending order.
+-- This query will group the shows by decade and count the number of shows released in each decade. 
+-- The floor((year - 1950) / 10) * 10 expression calculates the decade for each year by subtracting 1950 from the year, dividing by 10, rounding down to the nearest integer, 
+-- and multiplying by 10. The WHERE clause filters the data to include only the years between 1953 and 2022. 
+-- The GROUP BY clause groups the data by decade, and the ORDER BY clause sorts the results by decade in ascending order.
 
 -- 6. What are the most common genres of movies and TV shows on Netflix?
 
@@ -332,7 +335,6 @@ JOIN
 GROUP BY 
     ac.age_certification 
 )
-
 SELECT 
     num_content.age_certification, 
     certification_description.certification_description, 
