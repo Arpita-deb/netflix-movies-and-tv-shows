@@ -1,4 +1,4 @@
--- DATA CLEANING
+-- Part 1 - DATA CLEANING
 
 -- by running this code, the entire sql script will be executed.
 -- \i C:/Users/Dell/Desktop/Netflix/NETFLIX_DATA_CLEANING.sql
