@@ -1,5 +1,6 @@
 -- DATA CLEANING
 
+-- by running this code, the entire sql script will be executed.
 -- \i C:/Users/Dell/Desktop/Netflix/NETFLIX_DATA_CLEANING.sql
 
 
@@ -57,7 +58,6 @@ SET client_encoding TO UTF8;
 
 \copy raw_titles(index,id,title,type,release_year,age_certification,runtime,genres,production_countries,seasons,imdb_id,imdb_score,imdb_votes) FROM 'C:\Users\Dell\Desktop\Netflix\archive\raw_titles.csv' WITH DELIMITER ',' CSV HEADER;
 
-
 \copy raw_credits(index,person_id,id,name,character,role) FROM 'C:\Users\Dell\Desktop\Netflix\archive\raw_credits.csv' WITH DELIMITER ',' CSV HEADER;
 
 -- showing the first 10 rows from the tables
@@ -69,8 +69,6 @@ LIMIT 10;
 SELECT * 
 FROM raw_credits 
 LIMIT 10;
-
--- DATA CLEANING
 
 
 
@@ -176,6 +174,8 @@ FROM raw_titles t
 JOIN raw_credits c ON t.id = c.id
 WHERE c.id ='tm228574' AND c.person_id =65832;
 
+
+
 -- Step 10 - Capitalizing the values
 
 UPDATE raw_titles SET type = initcap(type);
@@ -185,12 +185,14 @@ UPDATE raw_credits SET role = initcap(role);
 UPDATE raw_credits SET name = initcap(name);
 
 
+
 -- Step 11 - Trimming leading and trailing spaces
 
 UPDATE raw_credits SET name = TRIM(name);
 UPDATE raw_credits SET character = TRIM(character);
 UPDATE raw_titles SET title = TRIM(title);
 UPDATE raw_titles SET genres = TRIM(genres);
+
 
 
 -- Step 12 - Replacing the Null Values
@@ -224,6 +226,7 @@ WHERE genres = '[]';
 UPDATE raw_titles 
 SET production_countries = 'N/A' 
 WHERE production_countries = '[]';
+
 
 
 
@@ -280,8 +283,9 @@ UPDATE raw_titles
 SET title = '30.March' 
 WHERE title = '30 March';
 
--- Step 15- Some more unusual titles starting with '#'
 
+
+-- Step 15- Some more unusual titles starting with '#'
 
 -- The SQL query selects the title column from the raw_titles table. 
 -- The WHERE clause filters out the rows where the title column starts 
@@ -385,11 +389,13 @@ OR character IS NULL
 OR role IS NULL;
 
 
+
 -- Step 21 - Fine Adjustments
 
 UPDATE titles SET genre = 'N/A' WHERE genre = '/';
 UPDATE titles SET country = 'N/A' WHERE country = '/';
 UPDATE credits SET character = 'N/A' WHERE character = '--';
+
 
 
 -- Step - 22 Importing the new tables as csv files
