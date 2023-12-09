@@ -1,4 +1,4 @@
--- Data Analysis
+-- Part 3 - Data Analysis
 
 -- entering the database 
 \c netflix
