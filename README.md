@@ -382,7 +382,7 @@ This database is now normalized upto 3rd Normal Form. It ensures that -
 
 # Dashboard:
 
-![Screenshot (1080)](https://github.com/Arpita-deb/netflix-movies-and-tv-shows/assets/139372731/d48f1da4-5a37-4cf3-9aa9-d0a6cbde957f)
+![netflix dashboard](https://miro.medium.com/v2/resize:fit:828/format:webp/1*kxqO7OTAwjyKcbmMyTfGow.png)
 
 The tableau dashboard can be accessed [here](https://public.tableau.com/app/profile/arpita.deb5031/viz/netflixdataanalysis_17012304017640/Dashboard2).
 
