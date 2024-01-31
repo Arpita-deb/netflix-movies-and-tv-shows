@@ -394,6 +394,16 @@ The tableau dashboard can be accessed [here](https://public.tableau.com/app/prof
 * It also indicates that most of the contents are for mature audiences as 14% of the total contents have TV-MA certification followed by R (11%) and PG-13 (8%).
 * Most of the shows have one season.
 
+# Recommendations for various stakeholders:
+
+* **Members**: Netflix can make its members happier and loyal by suggesting contents that they like based on what they watch. Netflix can also use the data to find and make more contents that suit its global members' tastes and needs. For example, Netflix can invest more in producing original shows from Japan and North Korea, as they are seen as emerging markets for show production. Netflix can also create more contents in different languages and genres, such as comedy, drama, and action, which are the most popular among its members.
+
+* **Investors**: Netflix can use the data to show its investors how it is leading and growing in the streaming industry. Netflix can show its investors how it has become more popular and successful by releasing more contents in the past ten years, and how it will keep doing so.
+
+* **Regulators**: Netflix can use the data to follow the rules and standards of different countries and regions where it offers its service. Netflix can make sure that its contents are fit and respectful for the people who watch them, and that it follows the culture and law of each place. Netflix can also use the data to make decisions on how to license, tax, and censor its contents, and to deal with any issues or concerns from the regulators.
+
+* **Communities and organizations**: Netflix can use the data to connect with the communities and organizations that are important for its business and social impact. Netflix can work with independent producers and content creators to give them a chance to share their work with the world. Netflix can also work with schools, NGOs, and media to promote its contents and raise awareness on various topics and issues that are in its contents. Netflix can also use the data to improve its diversity and inclusion efforts, and to support the causes and initiatives that match its values and mission.
+
 # Limitation of the project:
 
 * One possible limitation of the Netflix dataset is that it only contains data up to May 2022, which may not reflect most current contents and trends.
