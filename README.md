@@ -47,7 +47,7 @@ The goal of this project is to explore the characteristics and patterns of the N
 # Deliverables:
 
 1. A Project Proposal
-2. cleaned dataset
+2. A cleaned dataset
 3. Normalized data in PostgreSQL database
 4. A full documentation of data cleaning and analysis process
 5. Data visualizations and dashboard in Tableau
